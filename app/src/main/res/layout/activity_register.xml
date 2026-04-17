@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dark_bg"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="32dp"
+        android:gravity="center_horizontal">
+
+        <!-- Top spacing -->
+        <View android:layout_width="0dp" android:layout_height="40dp"/>
+
+        <!-- Logo -->
+        <TextView
+            android:text="HabitU"
+            android:textSize="42sp"
+            android:textStyle="bold"
+            android:textColor="@color/lime"
+            android:fontFamily="sans-serif-black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"/>
+
+        <!-- Subtitle -->
+        <TextView
+            android:text="Create your account"
+            android:textSize="15sp"
+            android:textColor="@color/muted"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"/>
+
+        <!-- Green line -->
+        <View
+            android:layout_width="60dp"
+            android:layout_height="3dp"
+            android:background="@color/lime"
+            android:layout_marginBottom="36dp"/>
+
+        <!-- First Name label -->
+        <TextView
+            android:text="First Name"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:textColor="@color/lime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"/>
+
+        <!-- First Name input -->
+        <EditText
+            android:id="@+id/etFirstName"
+            android:hint="Enter your first name"
+            android:inputType="textPersonName"
+            android:background="@drawable/input_bg"
+            android:textColor="@color/white"
+            android:textColorHint="@color/muted"
+            android:padding="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- Surname label -->
+        <TextView
+            android:text="Surname"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:textColor="@color/lime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"/>
+
+        <!-- Surname input -->
+        <EditText
+            android:id="@+id/etSurname"
+            android:hint="Enter your surname"
+            android:inputType="textPersonName"
+            android:background="@drawable/input_bg"
+            android:textColor="@color/white"
+            android:textColorHint="@color/muted"
+            android:padding="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- Phone Number label -->
+        <TextView
+            android:text="Phone Number"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:textColor="@color/lime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"/>
+
+        <!-- Phone Number input -->
+        <EditText
+            android:id="@+id/etPhone"
+            android:hint="Enter your phone number"
+            android:inputType="phone"
+            android:background="@drawable/input_bg"
+            android:textColor="@color/white"
+            android:textColorHint="@color/muted"
+            android:padding="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- Email label -->
+        <TextView
+            android:text="Email"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:textColor="@color/lime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"/>
+
+        <!-- Email input -->
+        <EditText
+            android:id="@+id/etEmail"
+            android:hint="Enter your email"
+            android:inputType="textEmailAddress"
+            android:background="@drawable/input_bg"
+            android:textColor="@color/white"
+            android:textColorHint="@color/muted"
+            android:padding="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- University label -->
+        <TextView
+            android:text="University (Optional)"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:textColor="@color/lime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"/>
+
+        <!-- University input -->
+        <EditText
+            android:id="@+id/etUniversity"
+            android:hint="Enter your university"
+            android:inputType="textCapWords"
+            android:background="@drawable/input_bg"
+            android:textColor="@color/white"
+            android:textColorHint="@color/muted"
+            android:padding="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- Password label -->
+        <TextView
+            android:text="Password"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:textColor="@color/lime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"/>
+
+        <!-- Password input -->
+        <EditText
+            android:id="@+id/etPassword"
+            android:hint="Create a password"
+            android:inputType="textPassword"
+            android:background="@drawable/input_bg"
+            android:textColor="@color/white"
+            android:textColorHint="@color/muted"
+            android:padding="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- Confirm Password label -->
+        <TextView
+            android:text="Confirm Password"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:textColor="@color/lime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"/>
+
+        <!-- Confirm Password input -->
+        <EditText
+            android:id="@+id/etConfirmPassword"
+            android:hint="Confirm your password"
+            android:inputType="textPassword"
+            android:background="@drawable/input_bg"
+            android:textColor="@color/white"
+            android:textColorHint="@color/muted"
+            android:padding="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="32dp"/>
+
+        <!-- Register button -->
+        <Button
+            android:id="@+id/btnRegister"
+            android:text="Create Account"
+            android:textColor="@color/dark_bg"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:background="@drawable/btn_lime"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginBottom="24dp"/>
+
+        <!-- Login link -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:text="Already have an account?  "
+                android:textSize="14sp"
+                android:textColor="@color/muted"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:id="@+id/tvLogin"
+                android:text="Sign in"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="@color/lime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+        <View android:layout_width="0dp" android:layout_height="40dp"/>
+
+        <!-- Copyright -->
+        <TextView
+            android:text="© 2026 Ntshovelo Mhaleni"
+            android:textSize="11sp"
+            android:textColor="@color/muted"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <View android:layout_width="0dp" android:layout_height="24dp"/>
+
+    </LinearLayout>
+</ScrollView>

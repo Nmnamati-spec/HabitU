@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dark_bg">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <TextView
+            android:text="Share Your Moment 📸"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"/>
+
+        <TextView
+            android:text="Your community will see this in their feed"
+            android:textSize="13sp"
+            android:textColor="@color/muted"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"/>
+
+        <!-- Image preview -->
+        <ImageView
+            android:id="@+id/imgPreview"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:scaleType="centerCrop"
+            android:background="@drawable/input_bg"
+            android:layout_marginBottom="12dp"/>
+
+        <!-- Pick image button -->
+        <Button
+            android:id="@+id/btnPickImage"
+            android:text="📷 Choose Photo or Video"
+            android:textColor="@color/lime"
+            android:textStyle="bold"
+            android:backgroundTint="@color/card_bg"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_marginBottom="20dp"/>
+
+        <!-- Habit tag label -->
+        <TextView
+            android:text="What habit is this about?"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:textColor="@color/lime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"/>
+
+        <!-- Habit spinner -->
+        <Spinner
+            android:id="@+id/spinnerHabit"
+            android:background="@drawable/input_bg"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_marginBottom="20dp"
+            android:paddingStart="14dp"
+            android:popupBackground="@color/card_bg"/>
+
+        <!-- Caption label -->
+        <TextView
+            android:text="Caption"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:textColor="@color/lime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"/>
+
+        <!-- Caption input -->
+        <EditText
+            android:id="@+id/etCaption"
+            android:hint="What did you do today?"
+            android:textColor="@color/white"
+            android:textColorHint="@color/muted"
+            android:background="@drawable/input_bg"
+            android:padding="16dp"
+            android:textSize="14sp"
+            android:inputType="textMultiLine"
+            android:minLines="3"
+            android:maxLines="5"
+            android:gravity="top"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="28dp"/>
+
+        <!-- Post button -->
+        <Button
+            android:id="@+id/btnPost"
+            android:text="Post to Feed 🌱"
+            android:textColor="@color/dark_bg"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:background="@drawable/btn_lime"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"/>
+
+    </LinearLayout>
+</ScrollView>

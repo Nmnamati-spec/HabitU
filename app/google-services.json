@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "368986208137",
+    "project_id": "habitu-14a0c",
+    "storage_bucket": "habitu-14a0c.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:368986208137:android:c96afcdb263e14837b1358",
+        "android_client_info": {
+          "package_name": "com.habitu.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC4hmd6-HELcHrtxpYb4aUfj4ZL2jHs1mQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

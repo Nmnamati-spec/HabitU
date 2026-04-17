@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dark_bg">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <TextView
+            android:text="Log a Habit ➕"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"/>
+
+        <TextView
+            android:text="Track what you did today"
+            android:textSize="13sp"
+            android:textColor="@color/muted"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="28dp"/>
+
+        <!-- Habit type -->
+        <TextView
+            android:text="What habit did you do?"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:textColor="@color/lime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"/>
+
+        <Spinner
+            android:id="@+id/spinnerHabitType"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:background="@drawable/input_bg"
+            android:paddingStart="14dp"
+            android:popupBackground="@color/card_bg"
+            android:layout_marginBottom="20dp"/>
+
+        <!-- Duration -->
+        <TextView
+            android:text="Duration (minutes)"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:textColor="@color/lime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"/>
+
+        <EditText
+            android:id="@+id/etDuration"
+            android:hint="e.g. 30"
+            android:inputType="number"
+            android:textColor="@color/white"
+            android:textColorHint="@color/muted"
+            android:background="@drawable/input_bg"
+            android:padding="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"/>
+
+        <!-- Distance (optional) -->
+        <TextView
+            android:text="Distance in km (optional)"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:textColor="@color/lime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"/>
+
+        <EditText
+            android:id="@+id/etDistance"
+            android:hint="e.g. 5.2"
+            android:inputType="numberDecimal"
+            android:textColor="@color/white"
+            android:textColorHint="@color/muted"
+            android:background="@drawable/input_bg"
+            android:padding="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"/>
+
+        <!-- Notes -->
+        <TextView
+            android:text="Notes (optional)"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:textColor="@color/lime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"/>
+
+        <EditText
+            android:id="@+id/etNotes"
+            android:hint="How did it feel today?"
+            android:inputType="textMultiLine"
+            android:minLines="3"
+            android:gravity="top"
+            android:textColor="@color/white"
+            android:textColorHint="@color/muted"
+            android:background="@drawable/input_bg"
+            android:padding="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="28dp"/>
+
+        <!-- Save button -->
+        <Button
+            android:id="@+id/btnSaveLog"
+            android:text="Save to Dashboard 🌱"
+            android:textColor="@color/dark_bg"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:background="@drawable/btn_lime"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"/>
+
+    </LinearLayout>
+</ScrollView>
