@@ -114,7 +114,7 @@ public class RegisterActivity extends AppCompatActivity {
                                     .addOnSuccessListener(unused -> {
                                         // Everything saved — go to home screen
                                         Toast.makeText(RegisterActivity.this,
-                                                "Account created! Welcome to HabitU 🌱",
+                                                "Account created! Welcome to HabitU!",
                                                 Toast.LENGTH_LONG).show();
                                         startActivity(new Intent(
                                                 RegisterActivity.this, HomeActivity.class));

@@ -44,18 +44,14 @@ public class HabitsFragment extends Fragment {
         logsContainer  = view.findViewById(R.id.logsContainer);
         barChart       = view.findViewById(R.id.barChart);
 
-        // Today's date
         String date = new SimpleDateFormat(
                 "EEEE, d MMMM yyyy", Locale.getDefault())
                 .format(new Date());
         tvTodayDate.setText(date);
 
-        // Log button
         btnLogNewHabit.setOnClickListener(v ->
-                startActivity(new Intent(getActivity(),
-                        LogHabitActivity.class)));
+                startActivity(new Intent(getActivity(), LogHabitActivity.class)));
 
-        // Chart tabs
         tabWeekly.setOnClickListener(v -> {
             showingWeekly = true;
             tabWeekly.setBackgroundResource(R.drawable.btn_lime);
@@ -93,20 +89,15 @@ public class HabitsFragment extends Fragment {
     private void loadStats() {
         Calendar cal  = Calendar.getInstance();
         int thisWeek  = cal.get(Calendar.WEEK_OF_YEAR);
-        int thisMonth = cal.get(Calendar.MONTH) + 1;
 
-        // Total logs
         db.collection("users").document(userId)
                 .collection("logs").get()
                 .addOnSuccessListener(snap -> {
                     tvTotalLogs.setText(String.valueOf(snap.size()));
-
-                    // Streak — count consecutive days
                     int streak = calculateStreak(snap.getDocuments());
                     tvStreakCount.setText(String.valueOf(streak));
                 });
 
-        // Weekly score
         db.collection("users").document(userId)
                 .collection("logs")
                 .whereEqualTo("week", thisWeek)
@@ -198,7 +189,6 @@ public class HabitsFragment extends Fragment {
         data.setBarWidth(0.5f);
         barChart.setData(data);
 
-        // Style chart
         barChart.setBackgroundColor(Color.parseColor("#222420"));
         barChart.getDescription().setEnabled(false);
         barChart.getLegend().setEnabled(false);
@@ -213,8 +203,7 @@ public class HabitsFragment extends Fragment {
         xAxis.setDrawGridLines(false);
         xAxis.setGranularity(1f);
 
-        barChart.getAxisLeft().setTextColor(
-                Color.parseColor("#6B6D65"));
+        barChart.getAxisLeft().setTextColor(Color.parseColor("#6B6D65"));
         barChart.getAxisLeft().setDrawGridLines(false);
         barChart.getAxisRight().setEnabled(false);
         barChart.invalidate();
@@ -230,8 +219,7 @@ public class HabitsFragment extends Fragment {
                     logsContainer.removeAllViews();
                     if (snap.isEmpty()) {
                         TextView empty = new TextView(getContext());
-                        empty.setText(
-                                "No habits logged yet.\nTap ➕ Log to start! 🌱");
+                        empty.setText("No habits logged yet. Tap Log to start!");
                         empty.setTextColor(0xFF6B6D65);
                         empty.setTextSize(13);
                         empty.setPadding(0, 16, 0, 0);
@@ -253,29 +241,23 @@ public class HabitsFragment extends Fragment {
         Double distance = doc.getDouble("distance");
         Long ts         = doc.getLong("timestamp");
 
-        TextView tvIcon  = card.findViewById(R.id.tvHabitIcon);
-        TextView tvName  = card.findViewById(R.id.tvHabitName);
-        TextView tvMeta  = card.findViewById(R.id.tvHabitMeta);
-        TextView tvCheck = card.findViewById(R.id.tvCheck);
-        TextView tv1Val  = card.findViewById(R.id.tvStat1Val);
-        TextView tv1Lbl  = card.findViewById(R.id.tvStat1Lbl);
-        TextView tv2Val  = card.findViewById(R.id.tvStat2Val);
-        TextView tv2Lbl  = card.findViewById(R.id.tvStat2Lbl);
-        TextView tv3Val  = card.findViewById(R.id.tvStat3Val);
-        TextView tv3Lbl  = card.findViewById(R.id.tvStat3Lbl);
-        View progressBar = card.findViewById(R.id.progressBar);
+        ImageView imgHabitIcon = card.findViewById(R.id.imgHabitIcon);
+        TextView tvName        = card.findViewById(R.id.tvHabitName);
+        TextView tvMeta        = card.findViewById(R.id.tvHabitMeta);
+        TextView tv1Val        = card.findViewById(R.id.tvStat1Val);
+        TextView tv1Lbl        = card.findViewById(R.id.tvStat1Lbl);
+        TextView tv2Val        = card.findViewById(R.id.tvStat2Val);
+        TextView tv2Lbl        = card.findViewById(R.id.tvStat2Lbl);
+        TextView tv3Val        = card.findViewById(R.id.tvStat3Val);
+        TextView tv3Lbl        = card.findViewById(R.id.tvStat3Lbl);
 
-        // Set emoji icon
-        tvIcon.setText(getEmojiForHabit(habit));
+        imgHabitIcon.setImageResource(HabitIconMapper.getIcon(habit));
         tvName.setText(habit != null ? habit : "Habit");
 
-        // Date
         String date = ts != null ? new SimpleDateFormat(
-                "EEE, d MMM", Locale.getDefault())
-                .format(new Date(ts)) : "";
+                "EEE, d MMM", Locale.getDefault()).format(new Date(ts)) : "";
         tvMeta.setText(date);
 
-        // Stats
         tv1Val.setText(duration != null ? duration + "min" : "—");
         tv1Lbl.setText("Duration");
 
@@ -287,26 +269,10 @@ public class HabitsFragment extends Fragment {
             tv2Lbl.setText("Distance");
         }
 
-        tv3Val.setText("✓");
+        tv3Val.setText("Done");
         tv3Val.setTextColor(Color.parseColor("#C8F53B"));
-        tv3Lbl.setText("Done");
-        tvCheck.setText("✓");
-        tvCheck.setTextColor(Color.parseColor("#C8F53B"));
+        tv3Lbl.setText("Status");
 
         logsContainer.addView(card);
-    }
-
-    private String getEmojiForHabit(String habit) {
-        if (habit == null) return "🌱";
-        String h = habit.toLowerCase();
-        if (h.contains("run"))     return "🏃";
-        if (h.contains("study"))   return "📚";
-        if (h.contains("gym"))     return "💪";
-        if (h.contains("meditat")) return "🧘";
-        if (h.contains("nutrit"))  return "🥗";
-        if (h.contains("water") || h.contains("hydrat")) return "💧";
-        if (h.contains("read"))    return "📖";
-        if (h.contains("sleep"))   return "😴";
-        return "🌱";
     }
 }

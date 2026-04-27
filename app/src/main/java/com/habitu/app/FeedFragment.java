@@ -1,6 +1,5 @@
 package com.habitu.app;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.*;
 import android.widget.TextView;
@@ -19,7 +18,6 @@ public class FeedFragment extends Fragment {
     List<DocumentSnapshot> postList = new ArrayList<>();
     FirebaseFirestore db;
     String userId;
-    List<String> userHabits = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -31,80 +29,37 @@ public class FeedFragment extends Fragment {
 
         rvFeed = view.findViewById(R.id.rvFeed);
 
-        // Pinterest 2 column staggered grid
         StaggeredGridLayoutManager layoutManager =
-                new StaggeredGridLayoutManager(2,
-                        StaggeredGridLayoutManager.VERTICAL);
+                new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         rvFeed.setLayoutManager(layoutManager);
 
         adapter = new PostAdapter(postList, getContext(), userId, db,
-                (postId, btnComment) -> openCommentSheet(postId, btnComment));
+                (postId, tvCommentCount) -> openCommentSheet(postId, tvCommentCount));
         rvFeed.setAdapter(adapter);
 
-        // Upload button
-        view.findViewById(R.id.btnUploadPost).setOnClickListener(v ->
-                startActivity(new Intent(getActivity(),
-                        UploadPostActivity.class)));
-
-        loadUserHabitsThenFeed();
+        loadFeed();
         return view;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        loadUserHabitsThenFeed();
-    }
-
-    private void loadUserHabitsThenFeed() {
-        db.collection("habits").whereEqualTo("userId", userId)
-                .get().addOnSuccessListener(snap -> {
-                    userHabits.clear();
-                    for (DocumentSnapshot doc : snap.getDocuments()) {
-                        String name = doc.getString("name");
-                        if (name != null) userHabits.add(name.toLowerCase());
-                    }
-                    loadFeed();
-                });
+        loadFeed();
     }
 
     private void loadFeed() {
         db.collection("posts")
                 .orderBy("timestamp", Query.Direction.DESCENDING)
-                .limit(40)
+                .limit(50)
                 .get()
                 .addOnSuccessListener(snap -> {
-                    List<DocumentSnapshot> myHabitPosts  = new ArrayList<>();
-                    List<DocumentSnapshot> discoverPosts = new ArrayList<>();
-
-                    for (DocumentSnapshot doc : snap.getDocuments()) {
-                        String habit = doc.getString("habit");
-                        if (habit == null) continue;
-
-                        boolean isMyHabit = false;
-                        for (String h : userHabits) {
-                            if (habit.toLowerCase().contains(h)) {
-                                isMyHabit = true;
-                                break;
-                            }
-                        }
-                        if (isMyHabit) myHabitPosts.add(doc);
-                        else           discoverPosts.add(doc);
-                    }
-
-                    // Mark discover posts
-                    List<DocumentSnapshot> discoverSlice =
-                            discoverPosts.subList(0,
-                                    Math.min(6, discoverPosts.size()));
-
                     postList.clear();
-                    postList.addAll(myHabitPosts);
-                    postList.addAll(discoverSlice);
+                    postList.addAll(snap.getDocuments());
                     adapter.notifyDataSetChanged();
                 });
     }
 
-    private void openCommentSheet(String postId, TextView btnComment) {
+    private void openCommentSheet(String postId, TextView tvCommentCount) {
         BottomSheetDialog sheet = new BottomSheetDialog(
                 requireContext(), R.style.BottomSheetTheme);
         View sheetView = LayoutInflater.from(getContext())
@@ -121,11 +76,9 @@ public class FeedFragment extends Fragment {
         List<Map<String, Object>> commentList = new ArrayList<>();
         CommentAdapter commentAdapter = new CommentAdapter(commentList);
         rv.setLayoutManager(
-                new androidx.recyclerview.widget.LinearLayoutManager(
-                        getContext()));
+                new androidx.recyclerview.widget.LinearLayoutManager(getContext()));
         rv.setAdapter(commentAdapter);
 
-        // Load comments in real time
         db.collection("posts").document(postId)
                 .collection("comments")
                 .orderBy("timestamp")
@@ -139,12 +92,11 @@ public class FeedFragment extends Fragment {
                         commentList.add(c);
                     }
                     commentAdapter.notifyDataSetChanged();
-                    btnComment.setText("💬 " + commentList.size());
+                    tvCommentCount.setText(String.valueOf(commentList.size()));
                     if (!commentList.isEmpty())
                         rv.scrollToPosition(commentList.size() - 1);
                 });
 
-        // Send comment
         btnSend.setOnClickListener(v -> {
             String text = etComment.getText().toString().trim();
             if (text.isEmpty()) return;

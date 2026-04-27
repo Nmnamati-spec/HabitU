@@ -1,9 +1,12 @@
 package com.habitu.app;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -12,9 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder> {
 
@@ -24,11 +25,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     FirebaseFirestore db;
     OnCommentClickListener commentListener;
 
-    // Emoji placeholders for posts with no image
-    String[] emojis = {"🏃", "📚", "💪", "🧘", "🥗", "💧", "📖", "🌅", "🏋️", "🎯"};
-
     public interface OnCommentClickListener {
-        void onCommentClick(String postId, TextView btnComment);
+        void onCommentClick(String postId, TextView tvCommentCount);
     }
 
     public PostAdapter(List<DocumentSnapshot> posts, Context context,
@@ -53,41 +51,45 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     public void onBindViewHolder(@NonNull PostViewHolder holder, int position) {
         DocumentSnapshot doc = posts.get(position);
 
-        String postId    = doc.getId();
-        String userName  = doc.getString("userName");
-        String caption   = doc.getString("caption");
-        String habit     = doc.getString("habit");
-        String imageUrl  = doc.getString("imageUrl");
-        boolean discover = doc.getBoolean("discover") != null
-                && doc.getBoolean("discover");
-        long likes       = doc.getLong("likes") != null
-                ? doc.getLong("likes") : 0;
+        String postId   = doc.getId();
+        String userName = doc.getString("userName");
+        String caption  = doc.getString("caption");
+        String habit    = doc.getString("habit");
+        String imageUrl = doc.getString("imageUrl");
+        boolean isVideo  = doc.getBoolean("isVideo") != null && doc.getBoolean("isVideo");
+        boolean discover = doc.getBoolean("discover") != null && doc.getBoolean("discover");
+        long likes = doc.getLong("likes") != null ? doc.getLong("likes") : 0;
 
         holder.tvHabitTag.setText(habit);
         holder.tvCaption.setText(caption);
-        holder.tvPostUser.setText("👤 " + userName);
-        holder.btnLike.setText("🤍 " + likes);
+        holder.tvPostUser.setText(userName);
+        holder.tvLikeCount.setText(String.valueOf(likes));
 
-        // Show discover badge
-        if (discover) {
-            holder.tvDiscoverBadge.setVisibility(View.VISIBLE);
-        } else {
-            holder.tvDiscoverBadge.setVisibility(View.GONE);
-        }
+        // Discover badge
+        holder.tvDiscoverBadge.setVisibility(discover ? View.VISIBLE : View.GONE);
 
-        // Load image or show emoji placeholder
-        if (imageUrl != null && !imageUrl.isEmpty()) {
+        // Show video, image, or habit icon depending on post type
+        if (isVideo && imageUrl != null && !imageUrl.isEmpty()) {
+            holder.frameVideoPost.setVisibility(View.VISIBLE);
+            holder.imgPost.setVisibility(View.GONE);
+            holder.frameHabitIcon.setVisibility(View.GONE);
+            final String videoUrl = imageUrl;
+            holder.frameVideoPost.setOnClickListener(v -> {
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setDataAndType(Uri.parse(videoUrl), "video/*");
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                context.startActivity(intent);
+            });
+        } else if (imageUrl != null && !imageUrl.isEmpty()) {
             holder.imgPost.setVisibility(View.VISIBLE);
-            holder.tvNoImageEmoji.setVisibility(View.GONE);
-            Glide.with(context)
-                    .load(imageUrl)
-                    .into(holder.imgPost);
+            holder.frameHabitIcon.setVisibility(View.GONE);
+            holder.frameVideoPost.setVisibility(View.GONE);
+            Glide.with(context).load(imageUrl).into(holder.imgPost);
         } else {
             holder.imgPost.setVisibility(View.GONE);
-            holder.tvNoImageEmoji.setVisibility(View.VISIBLE);
-            // Pick emoji based on habit
-            String emoji = getEmojiForHabit(habit);
-            holder.tvNoImageEmoji.setText(emoji);
+            holder.frameHabitIcon.setVisibility(View.VISIBLE);
+            holder.frameVideoPost.setVisibility(View.GONE);
+            holder.imgHabitIcon.setImageResource(HabitIconMapper.getIcon(habit));
         }
 
         // Load comment count and preview
@@ -99,12 +101,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
                 .get()
                 .addOnSuccessListener(comments -> {
                     int count = comments.size();
-                    holder.btnComment.setText("💬 " + count);
+                    holder.tvCommentCount.setText(String.valueOf(count));
                     if (!comments.isEmpty()) {
-                        String name    = comments.getDocuments()
-                                .get(0).getString("userName");
-                        String preview = comments.getDocuments()
-                                .get(0).getString("text");
+                        String name    = comments.getDocuments().get(0).getString("userName");
+                        String preview = comments.getDocuments().get(0).getString("text");
                         holder.tvCommentPreview.setText(name + ": " + preview);
                     } else {
                         holder.tvCommentPreview.setText("Be the first to comment...");
@@ -113,56 +113,49 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
 
         // Like button
         final long[] currentLikes = {likes};
-        holder.btnLike.setOnClickListener(v -> {
+        holder.layoutLike.setOnClickListener(v -> {
             currentLikes[0]++;
-            holder.btnLike.setText("❤️ " + currentLikes[0]);
+            holder.tvLikeCount.setText(String.valueOf(currentLikes[0]));
+            holder.imgLike.setImageResource(R.drawable.ic_heart);
             db.collection("posts").document(postId)
                     .update("likes", currentLikes[0]);
         });
 
-        // Comment button and preview
-        holder.btnComment.setOnClickListener(v ->
-                commentListener.onCommentClick(postId, holder.btnComment));
+        // Comment button
+        holder.layoutComment.setOnClickListener(v ->
+                commentListener.onCommentClick(postId, holder.tvCommentCount));
         holder.layoutCommentPreview.setOnClickListener(v ->
-                commentListener.onCommentClick(postId, holder.btnComment));
-    }
-
-    private String getEmojiForHabit(String habit) {
-        if (habit == null) return "🌱";
-        String h = habit.toLowerCase();
-        if (h.contains("run"))   return "🏃";
-        if (h.contains("study")) return "📚";
-        if (h.contains("gym"))   return "💪";
-        if (h.contains("meditat")) return "🧘";
-        if (h.contains("nutrit") || h.contains("eat")) return "🥗";
-        if (h.contains("water") || h.contains("hydrat")) return "💧";
-        if (h.contains("read"))  return "📖";
-        if (h.contains("sleep")) return "😴";
-        return "🌱";
+                commentListener.onCommentClick(postId, holder.tvCommentCount));
     }
 
     @Override
     public int getItemCount() { return posts.size(); }
 
     static class PostViewHolder extends RecyclerView.ViewHolder {
-        ImageView imgPost;
-        TextView tvNoImageEmoji, tvHabitTag, tvDiscoverBadge,
-                tvCaption, tvPostUser, btnLike, btnComment,
-                tvCommentPreview, tvViewAll;
-        LinearLayout layoutCommentPreview;
+        ImageView imgPost, imgHabitIcon, imgLike, imgComment;
+        FrameLayout frameHabitIcon, frameVideoPost;
+        TextView tvHabitTag, tvDiscoverBadge, tvCaption, tvPostUser,
+                tvLikeCount, tvCommentCount, tvCommentPreview, tvViewAll;
+        LinearLayout layoutLike, layoutComment, layoutCommentPreview;
 
         PostViewHolder(View v) {
             super(v);
             imgPost              = v.findViewById(R.id.imgPost);
-            tvNoImageEmoji       = v.findViewById(R.id.tvNoImageEmoji);
+            frameHabitIcon       = v.findViewById(R.id.frameHabitIcon);
+            frameVideoPost       = v.findViewById(R.id.frameVideoPost);
+            imgHabitIcon         = v.findViewById(R.id.imgHabitIcon);
+            imgLike              = v.findViewById(R.id.imgLike);
+            imgComment           = v.findViewById(R.id.imgComment);
             tvHabitTag           = v.findViewById(R.id.tvHabitTag);
             tvDiscoverBadge      = v.findViewById(R.id.tvDiscoverBadge);
             tvCaption            = v.findViewById(R.id.tvCaption);
             tvPostUser           = v.findViewById(R.id.tvPostUser);
-            btnLike              = v.findViewById(R.id.btnLike);
-            btnComment           = v.findViewById(R.id.btnComment);
+            tvLikeCount          = v.findViewById(R.id.tvLikeCount);
+            tvCommentCount       = v.findViewById(R.id.tvCommentCount);
             tvCommentPreview     = v.findViewById(R.id.tvCommentPreview);
             tvViewAll            = v.findViewById(R.id.tvViewAll);
+            layoutLike           = v.findViewById(R.id.layoutLike);
+            layoutComment        = v.findViewById(R.id.layoutComment);
             layoutCommentPreview = v.findViewById(R.id.layoutCommentPreview);
         }
     }

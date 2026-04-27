@@ -87,8 +87,6 @@ public class MainActivity extends AppCompatActivity {
                             }
                             btnLogin.setEnabled(true);
                             btnLogin.setText("Sign In");
-                            btnLogin.setEnabled(true);
-                            btnLogin.setText("Sign In");
                         });
             }
         });

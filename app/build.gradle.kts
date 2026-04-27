@@ -5,11 +5,7 @@ plugins {
 
 android {
     namespace = "com.habitu.app"
-    compileSdk {
-        version = release(36) {
-            minorApiLevel = 1
-        }
-    }
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.habitu.app"
@@ -37,9 +33,6 @@ android {
 }
 
 dependencies {
-    implementation("com.google.android.material:material:1.11.0")
-    implementation("com.google.firebase:firebase-storage")
-    implementation("com.github.bumptech.glide:glide:4.16.0")
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
@@ -53,6 +46,4 @@ dependencies {
     implementation("com.google.firebase:firebase-storage")
     implementation("com.github.bumptech.glide:glide:4.16.0")
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
-
-
 }

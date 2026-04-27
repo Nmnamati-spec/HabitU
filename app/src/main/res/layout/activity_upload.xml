@@ -11,7 +11,7 @@
         android:padding="24dp">
 
         <TextView
-            android:text="Share Your Moment 📸"
+            android:text="Share Your Moment"
             android:textSize="22sp"
             android:textStyle="bold"
             android:textColor="@color/white"
@@ -34,18 +34,56 @@
             android:layout_height="200dp"
             android:scaleType="centerCrop"
             android:background="@drawable/input_bg"
-            android:layout_marginBottom="12dp"/>
+            android:layout_marginBottom="4dp"/>
 
-        <!-- Pick image button -->
-        <Button
-            android:id="@+id/btnPickImage"
-            android:text="📷 Choose Photo or Video"
+        <!-- Video preview -->
+        <VideoView
+            android:id="@+id/videoPreview"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginBottom="4dp"
+            android:visibility="gone"/>
+
+        <!-- Media type label shown below preview -->
+        <TextView
+            android:id="@+id/tvMediaType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="11sp"
             android:textColor="@color/lime"
             android:textStyle="bold"
-            android:backgroundTint="@color/card_bg"
+            android:layout_marginBottom="12dp"
+            android:visibility="gone"/>
+
+        <!-- Photo / Video picker buttons side by side -->
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="52dp"
-            android:layout_marginBottom="20dp"/>
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="20dp">
+
+            <Button
+                android:id="@+id/btnPickImage"
+                android:text="📷  Photo"
+                android:textColor="@color/lime"
+                android:textStyle="bold"
+                android:backgroundTint="@color/card_bg"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="52dp"
+                android:layout_marginEnd="8dp"/>
+
+            <Button
+                android:id="@+id/btnPickVideo"
+                android:text="🎥  Video"
+                android:textColor="@color/lime"
+                android:textStyle="bold"
+                android:backgroundTint="@color/card_bg"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="52dp"/>
+
+        </LinearLayout>
 
         <!-- Habit tag label -->
         <TextView
@@ -97,7 +135,7 @@
         <!-- Post button -->
         <Button
             android:id="@+id/btnPost"
-            android:text="Post to Feed 🌱"
+            android:text="Post to Feed"
             android:textColor="@color/dark_bg"
             android:textStyle="bold"
             android:textSize="16sp"

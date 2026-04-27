@@ -19,13 +19,13 @@
         android:gravity="center_vertical">
 
         <!-- Avatar -->
-        <TextView
-            android:id="@+id/tvRequestAvatar"
+        <ImageView
+            android:id="@+id/imgRequestAvatar"
             android:layout_width="46dp"
             android:layout_height="46dp"
-            android:gravity="center"
-            android:textSize="22sp"
-            android:background="@drawable/input_bg"
+            android:padding="10dp"
+            android:src="@drawable/ic_person"
+            android:background="@drawable/icon_container_bg"
             android:layout_marginEnd="12dp"/>
 
         <!-- Info -->
@@ -69,12 +69,11 @@
             android:orientation="vertical"
             android:gravity="center">
 
-
             <Button
                 android:id="@+id/btnAccept"
                 android:layout_width="80dp"
                 android:layout_height="34dp"
-                android:text="✓ Accept"
+                android:text="Accept"
                 android:textSize="11sp"
                 android:textColor="@color/dark_bg"
                 android:textStyle="bold"
@@ -85,7 +84,7 @@
                 android:id="@+id/btnDecline"
                 android:layout_width="80dp"
                 android:layout_height="34dp"
-                android:text="✕ Decline"
+                android:text="Decline"
                 android:textSize="11sp"
                 android:textColor="@color/muted"
                 android:backgroundTint="@color/card_bg"/>

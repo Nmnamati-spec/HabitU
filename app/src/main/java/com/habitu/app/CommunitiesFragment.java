@@ -47,11 +47,10 @@ public class CommunitiesFragment extends Fragment {
     }
 
     private void addCommunityCard(DocumentSnapshot doc) {
-        String commId   = doc.getId();
-        String name     = doc.getString("name");
-        String icon     = doc.getString("icon");
-        String adminId  = doc.getString("adminId");
-        boolean locked  = Boolean.TRUE.equals(doc.getBoolean("isLocked"));
+        String commId  = doc.getId();
+        String name    = doc.getString("name");
+        String adminId = doc.getString("adminId");
+        boolean locked = Boolean.TRUE.equals(doc.getBoolean("isLocked"));
         List<String> members = (List<String>) doc.get("memberIds");
         List<String> pending = (List<String>) doc.get("pendingRequestIds");
 
@@ -71,11 +70,14 @@ public class CommunitiesFragment extends Fragment {
         card.setPadding(36, 32, 36, 32);
         card.setGravity(android.view.Gravity.CENTER_VERTICAL);
 
-        // Icon
-        TextView tvIcon = new TextView(getContext());
-        tvIcon.setText(icon != null ? icon : "👥");
-        tvIcon.setTextSize(26);
-        tvIcon.setPadding(0, 0, 24, 0);
+        // Community icon
+        android.widget.ImageView imgIcon = new android.widget.ImageView(getContext());
+        imgIcon.setImageResource(R.drawable.ic_group);
+        LinearLayout.LayoutParams iconParams = new LinearLayout.LayoutParams(52, 52);
+        iconParams.setMarginEnd(24);
+        imgIcon.setLayoutParams(iconParams);
+        imgIcon.setPadding(10, 10, 10, 10);
+        imgIcon.setBackgroundResource(R.drawable.icon_container_bg);
 
         // Text group
         LinearLayout textGroup = new LinearLayout(getContext());
@@ -84,15 +86,15 @@ public class CommunitiesFragment extends Fragment {
                 0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
 
         TextView tvName = new TextView(getContext());
-        tvName.setText(name + (isAdmin ? " 👑" : ""));
+        String displayName = name + (isAdmin ? " (Admin)" : "");
+        tvName.setText(displayName);
         tvName.setTextSize(14);
         tvName.setTypeface(null, android.graphics.Typeface.BOLD);
         tvName.setTextColor(0xFFF4F5F0);
 
         TextView tvMeta = new TextView(getContext());
         int memberCount = members != null ? members.size() : 0;
-        tvMeta.setText((memberCount) + " members • "
-                + (locked ? "🔒 Locked" : "🌱 Open"));
+        tvMeta.setText(memberCount + " members · " + (locked ? "Locked" : "Open"));
         tvMeta.setTextSize(11);
         tvMeta.setTextColor(0xFF6B6D65);
 
@@ -106,9 +108,8 @@ public class CommunitiesFragment extends Fragment {
         actionBtn.setPadding(24, 16, 24, 16);
 
         if (isAdmin) {
-            // Settings button
-            actionBtn.setText("⚙️");
-            actionBtn.setTextSize(18);
+            actionBtn.setText("Settings");
+            actionBtn.setTextColor(0xFFC8F53B);
             actionBtn.setOnClickListener(v -> {
                 Intent intent = new Intent(getActivity(),
                         CommunitySettingsActivity.class);
@@ -117,10 +118,10 @@ public class CommunitiesFragment extends Fragment {
                 startActivity(intent);
             });
         } else if (isMember) {
-            actionBtn.setText("Joined ✓");
+            actionBtn.setText("Joined");
             actionBtn.setTextColor(0xFF6B6D65);
         } else if (isPending) {
-            actionBtn.setText("Requested ⏳");
+            actionBtn.setText("Requested");
             actionBtn.setTextColor(0xFFFF6B35);
         } else if (locked) {
             actionBtn.setText("Request");
@@ -130,10 +131,9 @@ public class CommunitiesFragment extends Fragment {
                         .update("pendingRequestIds",
                                 FieldValue.arrayUnion(userId))
                         .addOnSuccessListener(x -> {
-                            actionBtn.setText("Requested ⏳");
+                            actionBtn.setText("Requested");
                             Toast.makeText(getContext(),
-                                    "Request sent! ⏳",
-                                    Toast.LENGTH_SHORT).show();
+                                    "Request sent!", Toast.LENGTH_SHORT).show();
                         });
             });
         } else {
@@ -144,16 +144,15 @@ public class CommunitiesFragment extends Fragment {
                         .update("memberIds",
                                 FieldValue.arrayUnion(userId))
                         .addOnSuccessListener(x -> {
-                            actionBtn.setText("Joined ✓");
+                            actionBtn.setText("Joined");
                             actionBtn.setTextColor(0xFF6B6D65);
                             Toast.makeText(getContext(),
-                                    "Joined " + name + "! 🌱",
-                                    Toast.LENGTH_SHORT).show();
+                                    "Joined " + name + "!", Toast.LENGTH_SHORT).show();
                         });
             });
         }
 
-        card.addView(tvIcon);
+        card.addView(imgIcon);
         card.addView(textGroup);
         card.addView(actionBtn);
         communitiesContainer.addView(card);

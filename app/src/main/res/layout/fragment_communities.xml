@@ -7,7 +7,7 @@
     android:padding="20dp">
 
     <TextView
-        android:text="📍 Communities"
+        android:text="Communities"
         android:textSize="26sp"
         android:textStyle="bold"
         android:textColor="@color/white"

@@ -1,9 +1,11 @@
 package com.habitu.app;
 
+import android.content.Intent;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -13,6 +15,10 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
         BottomNavigationView bottomNav = findViewById(R.id.bottomNav);
+        FloatingActionButton fabUpload = findViewById(R.id.fabUpload);
+
+        fabUpload.setOnClickListener(v ->
+                startActivity(new Intent(HomeActivity.this, UploadPostActivity.class)));
 
         // Load Feed as the first screen
         loadFragment(new FeedFragment());

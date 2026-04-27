@@ -5,40 +5,15 @@
     android:orientation="vertical"
     android:background="@color/dark_bg">
 
-    <LinearLayout
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:padding="16dp"
-        android:gravity="center_vertical"
-        android:background="@color/dark_bg">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="HabitU"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            android:textColor="@color/lime"
-            android:fontFamily="sans-serif-black"/>
-
-        <TextView
-            android:id="@+id/btnUploadPost"
-            android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            android:text="Post"
-            android:textSize="13sp"
-            android:textStyle="bold"
-            android:textColor="@color/dark_bg"
-            android:background="@drawable/btn_lime"
-            android:paddingStart="14dp"
-            android:paddingEnd="14dp"
-            android:gravity="center"
-            android:clickable="true"
-            android:focusable="true"/>
-
-    </LinearLayout>
+        android:text="HabitU"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:textColor="@color/lime"
+        android:fontFamily="sans-serif-black"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvFeed"

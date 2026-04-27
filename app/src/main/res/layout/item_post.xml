@@ -26,15 +26,57 @@
             android:background="@color/mid_bg"
             android:visibility="gone"/>
 
-        <!-- No image placeholder -->
-        <TextView
-            android:id="@+id/tvNoImageEmoji"
+        <!-- Video post thumbnail with play button -->
+        <FrameLayout
+            android:id="@+id/frameVideoPost"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:background="@color/mid_bg"
+            android:visibility="gone"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:layout_width="52dp"
+                android:layout_height="52dp"
+                android:layout_gravity="center"
+                android:src="@android:drawable/ic_media_play"
+                android:alpha="0.75"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|start"
+                android:layout_margin="8dp"
+                android:text="VIDEO"
+                android:textSize="9sp"
+                android:textStyle="bold"
+                android:textColor="@color/lime"
+                android:background="@drawable/tag_bg"
+                android:paddingStart="6dp"
+                android:paddingEnd="6dp"
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp"/>
+
+        </FrameLayout>
+
+        <!-- No image: habit icon placeholder -->
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="120dp"
-            android:gravity="center"
-            android:textSize="40sp"
             android:background="@color/mid_bg"
-            android:visibility="gone"/>
+            android:visibility="gone"
+            android:id="@+id/frameHabitIcon">
+
+            <ImageView
+                android:id="@+id/imgHabitIcon"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_gravity="center"
+                android:padding="8dp"
+                android:background="@drawable/icon_container_bg"/>
+
+        </FrameLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -60,7 +102,7 @@
             <!-- Discover badge -->
             <TextView
                 android:id="@+id/tvDiscoverBadge"
-                android:text="✨ Discover"
+                android:text="Discover"
                 android:textSize="9sp"
                 android:textStyle="bold"
                 android:textColor="#FF6B35"
@@ -96,26 +138,60 @@
                     android:maxLines="1"
                     android:ellipsize="end"/>
 
-                <TextView
-                    android:id="@+id/btnLike"
-                    android:text="🤍 0"
-                    android:textSize="11sp"
-                    android:textColor="@color/muted"
+                <!-- Like button -->
+                <LinearLayout
+                    android:id="@+id/layoutLike"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingEnd="8dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingEnd="12dp"
                     android:clickable="true"
-                    android:focusable="true"/>
+                    android:focusable="true">
 
-                <TextView
-                    android:id="@+id/btnComment"
-                    android:text="💬 0"
-                    android:textSize="11sp"
-                    android:textColor="@color/muted"
+                    <ImageView
+                        android:id="@+id/imgLike"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:src="@drawable/ic_heart_outline"/>
+
+                    <TextView
+                        android:id="@+id/tvLikeCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="11sp"
+                        android:textColor="@color/muted"
+                        android:layout_marginStart="4dp"
+                        android:text="0"/>
+
+                </LinearLayout>
+
+                <!-- Comment button -->
+                <LinearLayout
+                    android:id="@+id/layoutComment"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
                     android:clickable="true"
-                    android:focusable="true"/>
+                    android:focusable="true">
+
+                    <ImageView
+                        android:id="@+id/imgComment"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:src="@drawable/ic_comment"/>
+
+                    <TextView
+                        android:id="@+id/tvCommentCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="11sp"
+                        android:textColor="@color/muted"
+                        android:layout_marginStart="4dp"
+                        android:text="0"/>
+
+                </LinearLayout>
 
             </LinearLayout>
 

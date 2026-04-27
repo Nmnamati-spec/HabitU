@@ -1,8 +1,9 @@
 package com.habitu.app;
 
-import android.content.Intent;
+import android.widget.MediaController;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.*;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -11,35 +12,64 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 public class UploadPostActivity extends AppCompatActivity {
 
     ImageView imgPreview;
+    VideoView videoPreview;
+    TextView tvMediaType;
     EditText etCaption;
-    Button btnPickImage, btnPost;
+    Button btnPickImage, btnPickVideo, btnPost;
     Spinner spinnerHabit;
 
-    Uri selectedImageUri = null;
+    Uri selectedMediaUri = null;
+    boolean isVideoSelected = false;
+    MediaController mediaController;
+
     FirebaseAuth mAuth;
     FirebaseFirestore db;
     FirebaseStorage storage;
 
-    String[] habitOptions = {
-            "🏃 Running", "📚 Studying", "💪 Gym",
-            "🧘 Wellness", "🥗 Nutrition", "💧 Hydration",
-            "📖 Reading", "😴 Sleep", "Other"
-    };
+    List<String> habitOptions = Arrays.asList(
+            "Running", "Studying", "Gym",
+            "Wellness", "Nutrition", "Hydration",
+            "Reading", "Sleep", "Other"
+    );
 
     ActivityResultLauncher<String> imagePickerLauncher =
             registerForActivityResult(
                     new ActivityResultContracts.GetContent(),
                     uri -> {
                         if (uri != null) {
-                            selectedImageUri = uri;
+                            selectedMediaUri = uri;
+                            isVideoSelected = false;
+                            imgPreview.setVisibility(View.VISIBLE);
                             imgPreview.setImageURI(uri);
+                            videoPreview.setVisibility(View.GONE);
+                            videoPreview.stopPlayback();
+                            tvMediaType.setText("Photo selected");
+                            tvMediaType.setVisibility(View.VISIBLE);
+                        }
+                    });
+
+    ActivityResultLauncher<String> videoPickerLauncher =
+            registerForActivityResult(
+                    new ActivityResultContracts.GetContent(),
+                    uri -> {
+                        if (uri != null) {
+                            selectedMediaUri = uri;
+                            isVideoSelected = true;
+                            imgPreview.setVisibility(View.GONE);
+                            videoPreview.setVisibility(View.VISIBLE);
+                            videoPreview.setVideoURI(uri);
+                            videoPreview.start();
+                            tvMediaType.setText("Video selected");
+                            tvMediaType.setVisibility(View.VISIBLE);
                         }
                     });
 
@@ -52,24 +82,31 @@ public class UploadPostActivity extends AppCompatActivity {
         db      = FirebaseFirestore.getInstance();
         storage = FirebaseStorage.getInstance();
 
-        imgPreview    = findViewById(R.id.imgPreview);
-        etCaption     = findViewById(R.id.etCaption);
-        btnPickImage  = findViewById(R.id.btnPickImage);
-        btnPost       = findViewById(R.id.btnPost);
-        spinnerHabit  = findViewById(R.id.spinnerHabit);
+        imgPreview   = findViewById(R.id.imgPreview);
+        videoPreview = findViewById(R.id.videoPreview);
+        tvMediaType  = findViewById(R.id.tvMediaType);
+        etCaption    = findViewById(R.id.etCaption);
+        btnPickImage = findViewById(R.id.btnPickImage);
+        btnPickVideo = findViewById(R.id.btnPickVideo);
+        btnPost      = findViewById(R.id.btnPost);
+        spinnerHabit = findViewById(R.id.spinnerHabit);
 
-        // Set up habit spinner
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                this, android.R.layout.simple_spinner_item, habitOptions);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        HabitSpinnerAdapter adapter = new HabitSpinnerAdapter(this, habitOptions);
         spinnerHabit.setAdapter(adapter);
 
-        // Pick image
-        btnPickImage.setOnClickListener(v ->
-                imagePickerLauncher.launch("image/*"));
+        mediaController = new MediaController(this);
+        mediaController.setAnchorView(videoPreview);
+        videoPreview.setMediaController(mediaController);
 
-        // Post
+        btnPickImage.setOnClickListener(v -> imagePickerLauncher.launch("image/*"));
+        btnPickVideo.setOnClickListener(v -> videoPickerLauncher.launch("video/*"));
         btnPost.setOnClickListener(v -> uploadPost());
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (videoPreview.isPlaying()) videoPreview.pause();
     }
 
     private void uploadPost() {
@@ -84,34 +121,31 @@ public class UploadPostActivity extends AppCompatActivity {
         btnPost.setEnabled(false);
         btnPost.setText("Posting...");
 
-        if (selectedImageUri != null) {
-            // Upload image to Firebase Storage first
+        if (selectedMediaUri != null) {
+            String folder   = isVideoSelected ? "posts/videos/" : "posts/";
             String fileName = UUID.randomUUID().toString();
-            StorageReference ref = storage.getReference()
-                    .child("posts/" + fileName);
+            StorageReference ref = storage.getReference().child(folder + fileName);
 
-            ref.putFile(selectedImageUri)
+            ref.putFile(selectedMediaUri)
                     .addOnSuccessListener(snap ->
                             ref.getDownloadUrl().addOnSuccessListener(downloadUri ->
-                                    savePostToFirestore(caption, habit, downloadUri.toString(), false)))
+                                    savePostToFirestore(caption, habit,
+                                            downloadUri.toString(), isVideoSelected)))
                     .addOnFailureListener(e -> {
                         Toast.makeText(this, "Upload failed: " + e.getMessage(),
                                 Toast.LENGTH_SHORT).show();
                         btnPost.setEnabled(true);
-                        btnPost.setText("Post to Feed 🌱");
+                        btnPost.setText("Post to Feed");
                     });
         } else {
-            // No image — post text only
             savePostToFirestore(caption, habit, "", false);
         }
     }
 
     private void savePostToFirestore(String caption, String habit,
-                                     String imageUrl, boolean isVideo) {
-        String userId    = mAuth.getCurrentUser().getUid();
-        String userEmail = mAuth.getCurrentUser().getEmail();
+                                     String mediaUrl, boolean isVideo) {
+        String userId = mAuth.getCurrentUser().getUid();
 
-        // Get user's name from Firestore then save post
         db.collection("users").document(userId).get()
                 .addOnSuccessListener(doc -> {
                     String firstName = doc.getString("firstName");
@@ -123,7 +157,7 @@ public class UploadPostActivity extends AppCompatActivity {
                     post.put("userName",  fullName);
                     post.put("caption",   caption);
                     post.put("habit",     habit);
-                    post.put("imageUrl",  imageUrl);
+                    post.put("imageUrl",  mediaUrl);
                     post.put("isVideo",   isVideo);
                     post.put("likes",     0);
                     post.put("timestamp", System.currentTimeMillis());
@@ -131,7 +165,7 @@ public class UploadPostActivity extends AppCompatActivity {
                     db.collection("posts").add(post)
                             .addOnSuccessListener(ref -> {
                                 Toast.makeText(this,
-                                        "Posted! Your community can see it 🌱",
+                                        "Posted! Your community can see it",
                                         Toast.LENGTH_SHORT).show();
                                 finish();
                             })
@@ -140,7 +174,7 @@ public class UploadPostActivity extends AppCompatActivity {
                                         "Error: " + e.getMessage(),
                                         Toast.LENGTH_SHORT).show();
                                 btnPost.setEnabled(true);
-                                btnPost.setText("Post to Feed 🌱");
+                                btnPost.setText("Post to Feed");
                             });
                 });
     }

@@ -30,8 +30,7 @@ public class RequestAdapter extends
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent,
-                                         int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_member_request, parent, false);
         return new ViewHolder(v);
@@ -44,46 +43,36 @@ public class RequestAdapter extends
         String name       = (String) req.get("name");
         String university = (String) req.get("university");
 
-        holder.tvAvatar.setText("🧑");
         holder.tvName.setText(name);
         holder.tvUniversity.setText(university);
-        holder.tvScore.setText("⚡ Habit tracker member");
+        holder.tvScore.setText("Habit tracker member");
 
-        // Accept
         holder.btnAccept.setOnClickListener(v -> {
             WriteBatch batch = db.batch();
-            DocumentReference ref = db.collection("communities")
-                    .document(communityId);
-            batch.update(ref, "memberIds",
-                    FieldValue.arrayUnion(userId));
-            batch.update(ref, "pendingRequestIds",
-                    FieldValue.arrayRemove(userId));
+            DocumentReference ref = db.collection("communities").document(communityId);
+            batch.update(ref, "memberIds",         FieldValue.arrayUnion(userId));
+            batch.update(ref, "pendingRequestIds", FieldValue.arrayRemove(userId));
             batch.commit().addOnSuccessListener(x -> {
                 Toast.makeText(v.getContext(),
-                        name + " added to the community! ✅",
-                        Toast.LENGTH_SHORT).show();
+                        name + " added to the community!", Toast.LENGTH_SHORT).show();
                 onRefresh.run();
             });
         });
 
-        // Decline
-        holder.btnDecline.setOnClickListener(v -> {
-            db.collection("communities").document(communityId)
-                    .update("pendingRequestIds",
-                            FieldValue.arrayRemove(userId))
-                    .addOnSuccessListener(x -> onRefresh.run());
-        });
+        holder.btnDecline.setOnClickListener(v ->
+                db.collection("communities").document(communityId)
+                        .update("pendingRequestIds", FieldValue.arrayRemove(userId))
+                        .addOnSuccessListener(x -> onRefresh.run()));
     }
 
     @Override
     public int getItemCount() { return requests.size(); }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tvAvatar, tvName, tvUniversity, tvScore;
+        TextView tvName, tvUniversity, tvScore;
         Button btnAccept, btnDecline;
         ViewHolder(View v) {
             super(v);
-            tvAvatar     = v.findViewById(R.id.tvRequestAvatar);
             tvName       = v.findViewById(R.id.tvRequestName);
             tvUniversity = v.findViewById(R.id.tvRequestUniversity);
             tvScore      = v.findViewById(R.id.tvRequestScore);

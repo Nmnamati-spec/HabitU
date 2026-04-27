@@ -7,4 +7,5 @@
     <color name="muted">#6B6D65</color>
     <color name="white">#F4F5F0</color>
     <color name="border">#2A2C27</color>
+    <color name="icon_bg">#1A1A1A</color>
 </resources>

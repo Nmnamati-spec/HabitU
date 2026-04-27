@@ -5,8 +5,10 @@ import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class LogHabitActivity extends AppCompatActivity {
@@ -17,11 +19,11 @@ public class LogHabitActivity extends AppCompatActivity {
     FirebaseFirestore db;
     String userId;
 
-    String[] habitTypes = {
-            "🏃 Running", "📚 Studying", "💪 Gym",
-            "🧘 Meditation", "🥗 Nutrition", "💧 Hydration",
-            "📖 Reading", "😴 Sleep", "Other"
-    };
+    List<String> habitTypes = Arrays.asList(
+            "Running", "Studying", "Gym",
+            "Meditation", "Nutrition", "Hydration",
+            "Reading", "Sleep", "Other"
+    );
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,10 +39,7 @@ public class LogHabitActivity extends AppCompatActivity {
         etNotes          = findViewById(R.id.etNotes);
         btnSaveLog       = findViewById(R.id.btnSaveLog);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                this, android.R.layout.simple_spinner_item, habitTypes);
-        adapter.setDropDownViewResource(
-                android.R.layout.simple_spinner_dropdown_item);
+        HabitSpinnerAdapter adapter = new HabitSpinnerAdapter(this, habitTypes);
         spinnerHabitType.setAdapter(adapter);
 
         btnSaveLog.setOnClickListener(v -> saveLog());
@@ -68,8 +67,7 @@ public class LogHabitActivity extends AppCompatActivity {
         Map<String, Object> log = new HashMap<>();
         log.put("habit",     habit);
         log.put("duration",  Integer.parseInt(duration));
-        log.put("distance",  distance.isEmpty() ? 0 :
-                Double.parseDouble(distance));
+        log.put("distance",  distance.isEmpty() ? 0 : Double.parseDouble(distance));
         log.put("notes",     notes);
         log.put("timestamp", System.currentTimeMillis());
         log.put("week",      week);
@@ -81,16 +79,14 @@ public class LogHabitActivity extends AppCompatActivity {
                 .collection("logs").add(log)
                 .addOnSuccessListener(ref -> {
                     Toast.makeText(this,
-                            "Habit logged! Keep going 🌱",
-                            Toast.LENGTH_SHORT).show();
+                            "Habit logged! Keep going", Toast.LENGTH_SHORT).show();
                     finish();
                 })
                 .addOnFailureListener(e -> {
                     Toast.makeText(this,
-                            "Error: " + e.getMessage(),
-                            Toast.LENGTH_SHORT).show();
+                            "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     btnSaveLog.setEnabled(true);
-                    btnSaveLog.setText("Save to Dashboard 🌱");
+                    btnSaveLog.setText("Save to Dashboard");
                 });
     }
 }

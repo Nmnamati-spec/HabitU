@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,24 +19,27 @@ public class ChallengesFragment extends Fragment {
                 container, false);
         LinearLayout container2 = view.findViewById(R.id.challengesContainer);
 
-        String[][] challenges = {
-                {"🏃", "30-Day Running Streak",    "Run every day for 30 days",  "30 days",  "🥇"},
-                {"📚", "Study 2hrs Daily",         "Study 2 hours every day",    "14 days",  "📖"},
-                {"💧", "Hydration Challenge",      "Drink 8 glasses daily",      "7 days",   "💧"},
-                {"🧘", "Mindfulness Month",        "Meditate every morning",     "30 days",  "🧘"},
-                {"💪", "Gym 3x a Week",            "Hit the gym 3 times weekly", "4 weeks",  "💪"},
+        // {iconRes, title, desc, duration, badgeRes}
+        Object[][] challenges = {
+                {R.drawable.ic_run,       "30-Day Running Streak",  "Run every day for 30 days",  "30 days", R.drawable.ic_medal},
+                {R.drawable.ic_study,     "Study 2hrs Daily",        "Study 2 hours every day",    "14 days", R.drawable.ic_trophy},
+                {R.drawable.ic_water,     "Hydration Challenge",     "Drink 8 glasses daily",      "7 days",  R.drawable.ic_target},
+                {R.drawable.ic_meditation,"Mindfulness Month",       "Meditate every morning",     "30 days", R.drawable.ic_streak},
+                {R.drawable.ic_gym,       "Gym 3x a Week",           "Hit the gym 3 times weekly", "4 weeks", R.drawable.ic_trophy},
         };
 
-        for (String[] c : challenges) {
-            View card = createChallengeCard(c[0], c[1], c[2], c[3], c[4]);
+        for (Object[] c : challenges) {
+            View card = createChallengeCard(
+                    (int) c[0], (String) c[1], (String) c[2],
+                    (String) c[3], (int) c[4]);
             container2.addView(card);
         }
 
         return view;
     }
 
-    private View createChallengeCard(String icon, String title,
-                                     String desc, String duration, String badge) {
+    private View createChallengeCard(int iconRes, String title,
+                                     String desc, String duration, int badgeRes) {
         LinearLayout card = new LinearLayout(getContext());
         card.setOrientation(LinearLayout.VERTICAL);
         card.setBackgroundResource(R.drawable.input_bg);
@@ -48,10 +52,15 @@ public class ChallengesFragment extends Fragment {
 
         LinearLayout topRow = new LinearLayout(getContext());
         topRow.setOrientation(LinearLayout.HORIZONTAL);
+        topRow.setGravity(android.view.Gravity.CENTER_VERTICAL);
 
-        TextView tvIcon = new TextView(getContext());
-        tvIcon.setText(icon + "  ");
-        tvIcon.setTextSize(22);
+        ImageView imgIcon = new ImageView(getContext());
+        imgIcon.setImageResource(iconRes);
+        LinearLayout.LayoutParams iconParams = new LinearLayout.LayoutParams(48, 48);
+        iconParams.setMarginEnd(16);
+        imgIcon.setLayoutParams(iconParams);
+        imgIcon.setPadding(8, 8, 8, 8);
+        imgIcon.setBackgroundResource(R.drawable.icon_container_bg);
 
         TextView tvTitle = new TextView(getContext());
         tvTitle.setText(title);
@@ -61,13 +70,13 @@ public class ChallengesFragment extends Fragment {
         tvTitle.setLayoutParams(new LinearLayout.LayoutParams(
                 0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
 
-        TextView tvBadge = new TextView(getContext());
-        tvBadge.setText(badge);
-        tvBadge.setTextSize(20);
+        ImageView imgBadge = new ImageView(getContext());
+        imgBadge.setImageResource(badgeRes);
+        imgBadge.setLayoutParams(new LinearLayout.LayoutParams(36, 36));
 
-        topRow.addView(tvIcon);
+        topRow.addView(imgIcon);
         topRow.addView(tvTitle);
-        topRow.addView(tvBadge);
+        topRow.addView(imgBadge);
 
         TextView tvDesc = new TextView(getContext());
         tvDesc.setText(desc);
@@ -78,9 +87,16 @@ public class ChallengesFragment extends Fragment {
         LinearLayout bottomRow = new LinearLayout(getContext());
         bottomRow.setOrientation(LinearLayout.HORIZONTAL);
         bottomRow.setPadding(0, 8, 0, 0);
+        bottomRow.setGravity(android.view.Gravity.CENTER_VERTICAL);
+
+        ImageView imgTimer = new ImageView(getContext());
+        imgTimer.setImageResource(R.drawable.ic_timer);
+        LinearLayout.LayoutParams timerParams = new LinearLayout.LayoutParams(16, 16);
+        timerParams.setMarginEnd(6);
+        imgTimer.setLayoutParams(timerParams);
 
         TextView tvDuration = new TextView(getContext());
-        tvDuration.setText("⏱ " + duration);
+        tvDuration.setText(duration);
         tvDuration.setTextSize(11);
         tvDuration.setTextColor(0xFF6B6D65);
         tvDuration.setLayoutParams(new LinearLayout.LayoutParams(
@@ -93,8 +109,9 @@ public class ChallengesFragment extends Fragment {
         tvJoin.setTypeface(null, android.graphics.Typeface.BOLD);
         tvJoin.setOnClickListener(v ->
                 Toast.makeText(getContext(),
-                        "Joined: " + title + " 🏆", Toast.LENGTH_SHORT).show());
+                        "Joined: " + title, Toast.LENGTH_SHORT).show());
 
+        bottomRow.addView(imgTimer);
         bottomRow.addView(tvDuration);
         bottomRow.addView(tvJoin);
 

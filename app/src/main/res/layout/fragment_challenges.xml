@@ -7,7 +7,7 @@
     android:padding="20dp">
 
     <TextView
-        android:text="🏆 Challenges"
+        android:text="Challenges"
         android:textSize="26sp"
         android:textStyle="bold"
         android:textColor="@color/white"
