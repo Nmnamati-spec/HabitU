@@ -1,59 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/dark_bg">
+    android:orientation="vertical"
+    android:background="@color/dark_bg"
+    android:padding="20dp">
 
+    <!-- Header row: title + create button -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="20dp">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="4dp">
 
-        <TextView
-            android:text="Communities"
-            android:textSize="26sp"
-            android:textStyle="bold"
-            android:textColor="@color/white"
-            android:fontFamily="sans-serif-black"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"/>
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-        <TextView
-            android:text="Find your people nearby"
-            android:textSize="13sp"
-            android:textColor="@color/muted"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"/>
+            <TextView
+                android:text="Communities"
+                android:textSize="26sp"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:fontFamily="sans-serif-black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
 
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <LinearLayout
-                android:id="@+id/communitiesContainer"
-                android:layout_width="match_parent"
+            <TextView
+                android:text="Find your people nearby"
+                android:textSize="13sp"
+                android:textColor="@color/muted"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingBottom="80dp"/>
+                android:layout_marginTop="4dp"/>
+        </LinearLayout>
 
-        </ScrollView>
+        <TextView
+            android:id="@+id/btnCreateCommunity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="+ New"
+            android:textColor="@color/dark_bg"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:background="@drawable/bubble_sent"
+            android:paddingStart="14dp"
+            android:paddingEnd="14dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"/>
     </LinearLayout>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabCreateCommunity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="20dp"
-        android:contentDescription="Create Community"
-        app:backgroundTint="@color/lime"
-        app:tint="@color/dark_bg"
-        app:srcCompat="@drawable/ic_add"
-        app:fabSize="mini"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/border"
+        android:layout_marginBottom="16dp"/>
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/communitiesContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"/>
+
+    </ScrollView>
+</LinearLayout>

@@ -2,6 +2,7 @@ package com.habitu.app;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -9,24 +10,26 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class HomeActivity extends AppCompatActivity {
 
+    FloatingActionButton fabUpload;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
         BottomNavigationView bottomNav = findViewById(R.id.bottomNav);
-        FloatingActionButton fabUpload = findViewById(R.id.fabUpload);
+        fabUpload = findViewById(R.id.fabUpload);
 
         fabUpload.setOnClickListener(v ->
                 startActivity(new Intent(HomeActivity.this, UploadPostActivity.class)));
 
-        // Load Feed as the first screen
-        loadFragment(new FeedFragment());
+        // Show FAB on Feed, hide everywhere else
+        loadFragment(new FeedFragment(), true);
 
-        // Handle tab switching
         bottomNav.setOnItemSelectedListener(item -> {
-            Fragment selected;
             int id = item.getItemId();
+            Fragment selected;
+            boolean isFeed = id == R.id.nav_feed;
 
             if (id == R.id.nav_feed) {
                 selected = new FeedFragment();
@@ -40,15 +43,16 @@ public class HomeActivity extends AppCompatActivity {
                 selected = new ProfileFragment();
             }
 
-            loadFragment(selected);
+            loadFragment(selected, isFeed);
             return true;
         });
     }
 
-    private void loadFragment(Fragment fragment) {
+    private void loadFragment(Fragment fragment, boolean showFab) {
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragmentContainer, fragment)
                 .commit();
+        fabUpload.setVisibility(showFab ? View.VISIBLE : View.GONE);
     }
 }

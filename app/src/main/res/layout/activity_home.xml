@@ -25,19 +25,20 @@
         app:menu="@menu/bottom_nav_menu"
         app:labelVisibilityMode="labeled"/>
 
-    <!-- TikTok-style plus button centered on the bottom nav -->
+    <!-- Upload post button — floats above the bottom nav bar, shown only on Feed tab -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabUpload"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center_horizontal"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="68dp"
         android:src="@drawable/ic_add"
         android:contentDescription="Create post"
         app:backgroundTint="@color/lime"
         app:tint="@color/dark_bg"
         app:fabSize="normal"
         app:elevation="10dp"
-        app:borderWidth="0dp"/>
+        app:borderWidth="0dp"
+        android:visibility="gone"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

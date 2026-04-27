@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.*;
 import android.widget.*;
 import androidx.fragment.app.Fragment;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.*;
 import java.util.*;
@@ -26,8 +25,7 @@ public class CommunitiesFragment extends Fragment {
         userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         communitiesContainer = view.findViewById(R.id.communitiesContainer);
 
-        FloatingActionButton fab = view.findViewById(R.id.fabCreateCommunity);
-        fab.setOnClickListener(v ->
+        view.findViewById(R.id.btnCreateCommunity).setOnClickListener(v ->
                 startActivity(new Intent(getActivity(), CreateCommunityActivity.class)));
 
         loadCommunities();
