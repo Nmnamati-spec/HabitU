@@ -32,6 +32,9 @@
         <activity android:name=".LogHabitActivity"/>
         <activity android:name=".CommunitySettingsActivity"/>
         <activity android:name=".MemberRequestsActivity"/>
+        <activity android:name=".CommunityChatActivity"
+            android:windowSoftInputMode="adjustResize"/>
+        <activity android:name=".CreateCommunityActivity"/>
     </application>
 
 </manifest>

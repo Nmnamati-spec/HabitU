@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.*;
 import android.widget.*;
 import androidx.fragment.app.Fragment;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.*;
 import java.util.*;
@@ -19,11 +20,16 @@ public class CommunitiesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_communities,
-                container, false);
+        View view = inflater.inflate(R.layout.fragment_communities, container, false);
+
         db     = FirebaseFirestore.getInstance();
         userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         communitiesContainer = view.findViewById(R.id.communitiesContainer);
+
+        FloatingActionButton fab = view.findViewById(R.id.fabCreateCommunity);
+        fab.setOnClickListener(v ->
+                startActivity(new Intent(getActivity(), CreateCommunityActivity.class)));
+
         loadCommunities();
         return view;
     }
@@ -57,6 +63,7 @@ public class CommunitiesFragment extends Fragment {
         boolean isMember  = members != null && members.contains(userId);
         boolean isPending = pending != null && pending.contains(userId);
         boolean isAdmin   = userId.equals(adminId);
+        int memberCount   = members != null ? members.size() : 0;
 
         // Card
         LinearLayout card = new LinearLayout(getContext());
@@ -86,14 +93,12 @@ public class CommunitiesFragment extends Fragment {
                 0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
 
         TextView tvName = new TextView(getContext());
-        String displayName = name + (isAdmin ? " (Admin)" : "");
-        tvName.setText(displayName);
+        tvName.setText(name + (isAdmin ? " (Admin)" : ""));
         tvName.setTextSize(14);
         tvName.setTypeface(null, android.graphics.Typeface.BOLD);
         tvName.setTextColor(0xFFF4F5F0);
 
         TextView tvMeta = new TextView(getContext());
-        int memberCount = members != null ? members.size() : 0;
         tvMeta.setText(memberCount + " members · " + (locked ? "Locked" : "Open"));
         tvMeta.setTextSize(11);
         tvMeta.setTextColor(0xFF6B6D65);
@@ -101,60 +106,88 @@ public class CommunitiesFragment extends Fragment {
         textGroup.addView(tvName);
         textGroup.addView(tvMeta);
 
-        // Action button
-        TextView actionBtn = new TextView(getContext());
-        actionBtn.setTextSize(11);
-        actionBtn.setTypeface(null, android.graphics.Typeface.BOLD);
-        actionBtn.setPadding(24, 16, 24, 16);
+        // Action buttons container
+        LinearLayout actionGroup = new LinearLayout(getContext());
+        actionGroup.setOrientation(LinearLayout.VERTICAL);
+        actionGroup.setGravity(android.view.Gravity.CENTER_HORIZONTAL);
 
-        if (isAdmin) {
-            actionBtn.setText("Settings");
-            actionBtn.setTextColor(0xFFC8F53B);
-            actionBtn.setOnClickListener(v -> {
-                Intent intent = new Intent(getActivity(),
-                        CommunitySettingsActivity.class);
-                intent.putExtra("communityId",   commId);
-                intent.putExtra("communityName", name);
-                startActivity(intent);
-            });
-        } else if (isMember) {
-            actionBtn.setText("Joined");
-            actionBtn.setTextColor(0xFF6B6D65);
+        if (isAdmin || isMember) {
+            // Open button → community chat
+            TextView btnOpen = new TextView(getContext());
+            btnOpen.setText("Open");
+            btnOpen.setTextSize(11);
+            btnOpen.setTypeface(null, android.graphics.Typeface.BOLD);
+            btnOpen.setPadding(24, 16, 24, 16);
+            btnOpen.setTextColor(0xFFC8F53B);
+            btnOpen.setOnClickListener(v -> openChat(commId, name, adminId, memberCount));
+            actionGroup.addView(btnOpen);
+
+            if (isAdmin) {
+                TextView btnSettings = new TextView(getContext());
+                btnSettings.setText("Settings");
+                btnSettings.setTextSize(10);
+                btnSettings.setPadding(24, 6, 24, 6);
+                btnSettings.setTextColor(0xFF6B6D65);
+                btnSettings.setOnClickListener(v -> {
+                    Intent intent = new Intent(getActivity(), CommunitySettingsActivity.class);
+                    intent.putExtra("communityId",   commId);
+                    intent.putExtra("communityName", name);
+                    startActivity(intent);
+                });
+                actionGroup.addView(btnSettings);
+            }
         } else if (isPending) {
-            actionBtn.setText("Requested");
-            actionBtn.setTextColor(0xFFFF6B35);
+            TextView btn = new TextView(getContext());
+            btn.setText("Requested");
+            btn.setTextSize(11);
+            btn.setTypeface(null, android.graphics.Typeface.BOLD);
+            btn.setPadding(24, 16, 24, 16);
+            btn.setTextColor(0xFFFF6B35);
+            actionGroup.addView(btn);
         } else if (locked) {
-            actionBtn.setText("Request");
-            actionBtn.setTextColor(0xFFFF6B35);
-            actionBtn.setOnClickListener(v -> {
-                db.collection("communities").document(commId)
-                        .update("pendingRequestIds",
-                                FieldValue.arrayUnion(userId))
-                        .addOnSuccessListener(x -> {
-                            actionBtn.setText("Requested");
-                            Toast.makeText(getContext(),
-                                    "Request sent!", Toast.LENGTH_SHORT).show();
-                        });
-            });
+            TextView btn = new TextView(getContext());
+            btn.setText("Request");
+            btn.setTextSize(11);
+            btn.setTypeface(null, android.graphics.Typeface.BOLD);
+            btn.setPadding(24, 16, 24, 16);
+            btn.setTextColor(0xFFFF6B35);
+            btn.setOnClickListener(v ->
+                    db.collection("communities").document(commId)
+                            .update("pendingRequestIds", FieldValue.arrayUnion(userId))
+                            .addOnSuccessListener(x -> {
+                                btn.setText("Requested");
+                                Toast.makeText(getContext(), "Request sent!", Toast.LENGTH_SHORT).show();
+                            }));
+            actionGroup.addView(btn);
         } else {
-            actionBtn.setText("Join");
-            actionBtn.setTextColor(0xFFC8F53B);
-            actionBtn.setOnClickListener(v -> {
-                db.collection("communities").document(commId)
-                        .update("memberIds",
-                                FieldValue.arrayUnion(userId))
-                        .addOnSuccessListener(x -> {
-                            actionBtn.setText("Joined");
-                            actionBtn.setTextColor(0xFF6B6D65);
-                            Toast.makeText(getContext(),
-                                    "Joined " + name + "!", Toast.LENGTH_SHORT).show();
-                        });
-            });
+            TextView btn = new TextView(getContext());
+            btn.setText("Join");
+            btn.setTextSize(11);
+            btn.setTypeface(null, android.graphics.Typeface.BOLD);
+            btn.setPadding(24, 16, 24, 16);
+            btn.setTextColor(0xFFC8F53B);
+            btn.setOnClickListener(v ->
+                    db.collection("communities").document(commId)
+                            .update("memberIds", FieldValue.arrayUnion(userId))
+                            .addOnSuccessListener(x -> {
+                                Toast.makeText(getContext(), "Joined " + name + "!", Toast.LENGTH_SHORT).show();
+                                loadCommunities();
+                            }));
+            actionGroup.addView(btn);
         }
 
         card.addView(imgIcon);
         card.addView(textGroup);
-        card.addView(actionBtn);
+        card.addView(actionGroup);
         communitiesContainer.addView(card);
+    }
+
+    private void openChat(String commId, String name, String adminId, int memberCount) {
+        Intent intent = new Intent(getActivity(), CommunityChatActivity.class);
+        intent.putExtra("communityId",   commId);
+        intent.putExtra("communityName", name);
+        intent.putExtra("adminId",       adminId);
+        intent.putExtra("memberCount",   memberCount);
+        startActivity(intent);
     }
 }
