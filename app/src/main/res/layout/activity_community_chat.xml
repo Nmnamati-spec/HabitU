@@ -101,7 +101,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:hint="Message..."
-            android:hintTextColor="@color/muted"
+            android:textColorHint="@color/muted"
             android:textColor="@color/white"
             android:background="@drawable/input_bg"
             android:paddingStart="16dp"
