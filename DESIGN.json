@@ -1,0 +1,150 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-04-28T00:00:00Z",
+  "title": "Design System: HabitU",
+  "extensions": {
+    "colorMeta": {
+      "deep-bark":     { "role": "neutral",   "displayName": "Deep Bark",     "canonical": "oklch(8% 0.008 55)",   "tonalRamp": ["#0A0806", "#130F0B", "#1D1610", "#2A2016", "#3F3020", "#5E4A30", "#8A7050", "#BEA882"] },
+      "warm-coal":     { "role": "neutral",   "displayName": "Warm Coal",     "canonical": "oklch(13% 0.010 60)",  "tonalRamp": ["#0A0806", "#130F0B", "#1D1812", "#2A2218", "#3E3226", "#5C4C38", "#8A7860", "#BEA888"] },
+      "ember-card":    { "role": "neutral",   "displayName": "Ember Card",    "canonical": "oklch(17% 0.010 60)",  "tonalRamp": ["#100C08", "#1A1410", "#252018", "#322920", "#4A3C2C", "#6A5840", "#9A8468", "#CAAE90"] },
+      "ember-border":  { "role": "neutral",   "displayName": "Ember Border",  "canonical": "oklch(22% 0.012 60)",  "tonalRamp": ["#120E0A", "#1E1810", "#2A2218", "#332B1F", "#4A3C2A", "#6A5840", "#9A8468", "#CAB090"] },
+      "golden-hour":   { "role": "primary",   "displayName": "Golden Hour",   "canonical": "oklch(72% 0.17 78)",   "tonalRamp": ["#1A1005", "#2E1B08", "#47280C", "#6B3E10", "#9A5E18", "#D4A832", "#EDD07A", "#F7EED1"] },
+      "tag-glow":      { "role": "primary",   "displayName": "Tag Glow",      "canonical": "oklch(14% 0.06 78)",   "tonalRamp": ["#100A02", "#1A1005", "#261E0A", "#382C12", "#52401C", "#7A6030", "#A88848", "#D4B870"] },
+      "warm-cream":    { "role": "neutral",   "displayName": "Warm Cream",    "canonical": "oklch(94% 0.008 70)",  "tonalRamp": ["#201A14", "#3A3028", "#584C40", "#7A6E60", "#A09080", "#C8BEB0", "#DDD5CC", "#F2EDE6"] },
+      "warm-dust":     { "role": "neutral",   "displayName": "Warm Dust",     "canonical": "oklch(46% 0.010 65)",  "tonalRamp": ["#1A1410", "#2E2820", "#443C30", "#5C5045", "#7A7060", "#9A9080", "#BAAAA0", "#D8CEC8"] },
+      "warm-haze":     { "role": "neutral",   "displayName": "Warm Haze",     "canonical": "oklch(64% 0.008 70)",  "tonalRamp": ["#1E1810", "#342C24", "#4C4438", "#685E54", "#887E74", "#A09480", "#BCAAA0", "#D8CAC0"] },
+      "growth":        { "role": "secondary", "displayName": "Growth",        "canonical": "oklch(72% 0.19 155)",  "tonalRamp": ["#042010", "#0A3820", "#0E5030", "#186844", "#228060", "#3ECC7F", "#70E0A4", "#B0F0D0"] },
+      "ember-signal":  { "role": "tertiary",  "displayName": "Ember Signal",  "canonical": "oklch(68% 0.20 50)",   "tonalRamp": ["#200800", "#3C1408", "#581E0C", "#7A2E14", "#A04020", "#F07D3C", "#F8AA80", "#FCDABA"] },
+      "violet":        { "role": "tertiary",  "displayName": "Violet",        "canonical": "oklch(65% 0.15 280)",  "tonalRamp": ["#0C0820", "#181438", "#242050", "#343070", "#4A4898", "#7B86F4", "#A8B0F8", "#D0D4FC"] }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display",  "purpose": "Screen titles. One per screen. Set heavy and tight." },
+      "headline": { "displayName": "Headline", "purpose": "Section headers and modal titles." },
+      "title":    { "displayName": "Title",    "purpose": "Card titles and list item primary labels." },
+      "body":     { "displayName": "Body",     "purpose": "Post content, descriptions, input values. Max ~60 chars per line." },
+      "label":    { "displayName": "Label",    "purpose": "Metadata — dates, counts, secondary info." },
+      "micro":    { "displayName": "Micro",    "purpose": "Chips, tags, status badges only. Never at body length." }
+    },
+    "shadows": [],
+    "motion": [
+      { "name": "press-in",     "value": "scaleX=0.97, scaleY=0.97, duration=120ms, interpolator=decelerate_quad", "purpose": "All tappable cards and buttons on press. The only tactile metaphor in the system." },
+      { "name": "press-out",    "value": "scaleX=1.0,  scaleY=1.0,  duration=200ms, interpolator=decelerate_quad", "purpose": "Release state for press-in." },
+      { "name": "state-change", "value": "duration=180ms, interpolator=decelerate",                                 "purpose": "Colour transitions (active tab, focus border, chip selection)." },
+      { "name": "screen-entry", "value": "alpha 0→1, translateY 24dp→0, duration=280ms, interpolator=decelerate_quint", "purpose": "Fragment/screen entry. Subtle vertical rise. Never horizontal slides." }
+    ],
+    "breakpoints": []
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Primary CTA. Golden-hour fill, deep-bark text. The main action on any screen.",
+      "html": "<button class=\"ds-btn-primary\">Log Habit</button>",
+      "css": ".ds-btn-primary { background: #D4A832; color: #130F0B; font-size: 13px; font-weight: 700; letter-spacing: 0.01em; padding: 14px 24px; border: none; border-radius: 10px; cursor: pointer; transition: transform 120ms cubic-bezier(0.0, 0.0, 0.2, 1), background 180ms; } .ds-btn-primary:hover { background: #EDD07A; } .ds-btn-primary:active { transform: scale(0.97); background: #C49822; } .ds-btn-primary:focus-visible { outline: 2px solid #D4A832; outline-offset: 3px; }"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Secondary action. Ember-card fill with warm-cream text.",
+      "html": "<button class=\"ds-btn-ghost\">View Community</button>",
+      "css": ".ds-btn-ghost { background: #252018; color: #F2EDE6; font-size: 13px; font-weight: 700; padding: 14px 24px; border: 1px solid #332B1F; border-radius: 10px; cursor: pointer; transition: transform 120ms cubic-bezier(0.0, 0.0, 0.2, 1), border-color 180ms; } .ds-btn-ghost:hover { border-color: #7A7060; } .ds-btn-ghost:active { transform: scale(0.97); } .ds-btn-ghost:focus-visible { outline: 2px solid #D4A832; outline-offset: 3px; }"
+    },
+    {
+      "name": "Active Chip",
+      "kind": "chip",
+      "refersTo": "chip-active",
+      "description": "Selected filter or active tab toggle. Golden-hour fill.",
+      "html": "<span class=\"ds-chip ds-chip--active\">Weekly</span>",
+      "css": ".ds-chip { display: inline-block; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 8px; transition: background 180ms, color 180ms; } .ds-chip--active { background: #D4A832; color: #130F0B; } .ds-chip--inactive { background: #252018; color: #7A7060; }"
+    },
+    {
+      "name": "Inactive Chip",
+      "kind": "chip",
+      "refersTo": "chip-inactive",
+      "description": "Unselected filter state. Ember-card fill, warm-dust text.",
+      "html": "<span class=\"ds-chip ds-chip--inactive\">Monthly</span>",
+      "css": ".ds-chip--inactive { background: #252018; color: #7A7060; }"
+    },
+    {
+      "name": "Community Card",
+      "kind": "card",
+      "refersTo": "card-community",
+      "description": "2-column grid card for community discovery. Thumbnail bleeds edge-to-edge at top.",
+      "html": "<div class=\"ds-card-community\"><div class=\"ds-card-community__thumb\"><span class=\"ds-card-community__chip\">Fitness</span></div><div class=\"ds-card-community__info\"><p class=\"ds-card-community__name\">Morning Runners</p><p class=\"ds-card-community__meta\">1.2k members</p><button class=\"ds-btn-ghost ds-card-community__action\">Join</button></div></div>",
+      "css": ".ds-card-community { background: #252018; border: 1px solid #332B1F; border-radius: 16px; overflow: hidden; transition: transform 120ms cubic-bezier(0.0, 0.0, 0.2, 1); } .ds-card-community:active { transform: scale(0.97); } .ds-card-community__thumb { aspect-ratio: 1; background: #0C1E35; position: relative; display: flex; align-items: center; justify-content: center; } .ds-card-community__chip { position: absolute; bottom: 8px; left: 8px; background: #261E0A; color: #F2EDE6; font-size: 9px; font-weight: 700; letter-spacing: 0.07em; padding: 3px 6px; border-radius: 6px; } .ds-card-community__info { padding: 12px; } .ds-card-community__name { color: #F2EDE6; font-size: 14px; font-weight: 700; margin: 0 0 4px; } .ds-card-community__meta { color: #7A7060; font-size: 11px; margin: 0 0 10px; } .ds-card-community__action { font-size: 11px; font-weight: 700; padding: 8px 14px; width: 100%; }"
+    },
+    {
+      "name": "Feed Card",
+      "kind": "card",
+      "description": "Variable-height image-forward card for the social feed. Height varies by image aspect ratio.",
+      "html": "<div class=\"ds-card-feed\"><div class=\"ds-card-feed__image-wrap\"><div class=\"ds-card-feed__image\" style=\"background:#252018\"></div><div class=\"ds-card-feed__scrim\"><span class=\"ds-card-feed__username\">@alex_runs</span></div></div><div class=\"ds-card-feed__body\"><p class=\"ds-card-feed__caption\">Day 47. 6am run in the cold and I can&#39;t believe I love it now.</p><div class=\"ds-card-feed__meta\"><span>❤ 34</span><span>💬 8</span></div></div></div>",
+      "css": ".ds-card-feed { background: #252018; border: 1px solid #332B1F; border-radius: 16px; overflow: hidden; transition: transform 120ms cubic-bezier(0.0, 0.0, 0.2, 1); } .ds-card-feed:active { transform: scale(0.97); } .ds-card-feed__image-wrap { position: relative; } .ds-card-feed__image { width: 100%; aspect-ratio: 4/5; object-fit: cover; display: block; } .ds-card-feed__scrim { position: absolute; bottom: 0; left: 0; right: 0; height: 56px; background: linear-gradient(to top, rgba(19,15,11,0.85), transparent); display: flex; align-items: flex-end; padding: 8px 12px; } .ds-card-feed__username { color: #F2EDE6; font-size: 12px; font-weight: 700; } .ds-card-feed__body { padding: 10px 12px 12px; } .ds-card-feed__caption { color: #F2EDE6; font-size: 13px; line-height: 1.5; margin: 0 0 8px; } .ds-card-feed__meta { display: flex; gap: 16px; color: #7A7060; font-size: 11px; }"
+    },
+    {
+      "name": "Input Field",
+      "kind": "input",
+      "refersTo": "input-field",
+      "description": "Standard text input. Ember-card fill, ember-border stroke, golden-hour focus ring.",
+      "html": "<div class=\"ds-input-wrap\"><input class=\"ds-input\" type=\"text\" placeholder=\"Search communities...\"></div>",
+      "css": ".ds-input-wrap { position: relative; } .ds-input { width: 100%; background: #252018; color: #F2EDE6; font-size: 13px; padding: 12px 16px; border: 1px solid #332B1F; border-radius: 10px; outline: none; box-sizing: border-box; transition: border-color 180ms; } .ds-input::placeholder { color: #7A7060; } .ds-input:focus { border-color: #D4A832; } .ds-input:disabled { opacity: 0.45; cursor: not-allowed; }"
+    },
+    {
+      "name": "Status Badge",
+      "kind": "chip",
+      "description": "Semantic badge for community status: open, requesting, admin.",
+      "html": "<span class=\"ds-badge ds-badge--open\">Open</span>",
+      "css": ".ds-badge { display: inline-block; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 8px; } .ds-badge--open { background: #0E2E1C; color: #3ECC7F; } .ds-badge--request { background: #2C1608; color: #F07D3C; } .ds-badge--admin { background: #131428; color: #7B86F4; }"
+    },
+    {
+      "name": "Bottom Navigation",
+      "kind": "nav",
+      "description": "5-tab bottom nav bar. Active tab in golden-hour, inactive in warm-dust. No indicator pills.",
+      "html": "<nav class=\"ds-bottom-nav\"><button class=\"ds-bottom-nav__item ds-bottom-nav__item--active\"><svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"currentColor\"><path d=\"M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z\"/></svg><span>Feed</span></button><button class=\"ds-bottom-nav__item\"><svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"M12 8v4l3 3\"/></svg><span>Habits</span></button></nav>",
+      "css": ".ds-bottom-nav { display: flex; background: #130F0B; border-top: 1px solid #332B1F; padding: 8px 0 12px; } .ds-bottom-nav__item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; background: none; border: none; color: #7A7060; font-size: 10px; font-weight: 400; cursor: pointer; padding: 4px 0; transition: color 180ms; } .ds-bottom-nav__item--active { color: #D4A832; font-weight: 700; } .ds-bottom-nav__item:focus-visible { outline: 2px solid #D4A832; outline-offset: 2px; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Warm Training Log",
+    "overview": "HabitU is a dark editorial journal, not a neon fitness app. The visual system is built from warm charcoal surfaces — deep bark blacks, amber card layers, ember borders — lit by a single signature accent the colour of golden-hour light caught mid-run. The feed feels like flipping through a beautifully kept record of who you are becoming: image-forward, varied, alive with real content.\n\nThe system draws from two references held in tension. From Pinterest: image-first discovery, masonry rhythm, editorial hierarchy. From Strava: earned achievement, athletic restraint, social proof without vanity metrics.\n\nThis system explicitly rejects neon fitness app energy, corporate wellness softness, gamification clichés, and generic Material Design defaults.",
+    "keyCharacteristics": [
+      "Warm dark surfaces — charcoal tinted toward brown, never cold blue-black",
+      "One earned accent — amber-gold appears only where it means something",
+      "Image-forward layouts with deliberate height variation",
+      "Weight contrast over size contrast for typographic hierarchy",
+      "Flat elevation expressed through tonal warmth, never drop shadows",
+      "Motion that feels satisfying, not busy — press scales, entry fades, completion moments"
+    ],
+    "rules": [
+      { "name": "The Golden Hour Rule",    "body": "The amber accent is used exclusively on earned or active states. It never appears as decoration. Its rarity is its authority.",                                  "section": "colors" },
+      { "name": "The Cold-Free Rule",      "body": "No pure blacks, no cool greys, no blue-shifted neutrals outside the semantic violet. If a surface reads cooler than ember-card, replace it.",             "section": "colors" },
+      { "name": "The Weight Gap Rule",     "body": "Adjacent text roles must differ by at least 200 weight points or 3sp in size.",                                                                          "section": "typography" },
+      { "name": "The Micro Exception",     "body": "The 9sp micro size is valid only in chips, tags, and badges. Never shrink body copy to fit a container.",                                                 "section": "typography" },
+      { "name": "The Flat-By-Default Rule","body": "cardElevation is 0dp everywhere. If a component needs to feel elevated, the solution is a warmer background, not a shadow.",                            "section": "elevation" },
+      { "name": "The Tonal Depth Rule",    "body": "Surface stack: deep-bark → warm-coal → ember-card → warm-cream content. Never invert this order.",                                                       "section": "elevation" }
+    ],
+    "dos": [
+      "Do warm every neutral toward brown, not blue.",
+      "Do vary feed card heights deliberately — identical-height cards betray the system.",
+      "Do use golden-hour only on earned or active states.",
+      "Do use weight contrast (900 vs 400) as the primary hierarchy tool.",
+      "Do let images bleed to card edges on feed cards.",
+      "Do apply scale_press (0.97, 120ms) to every tappable card and button.",
+      "Do use ember-signal (#F07D3C) for attention states — it harmonises with the warm palette.",
+      "Do test new screens against the Cold-Free Rule."
+    ],
+    "donts": [
+      "Don't use the legacy lime #C8F53B as primary accent — golden-hour (#D4A832) is the evolved form.",
+      "Don't use #000000 or #FFFFFF. Use deep-bark and warm-cream respectively.",
+      "Don't build identical card grids — vary height, image ratio, and content density.",
+      "Don't use border-left or border-right greater than 1dp as a coloured accent stripe.",
+      "Don't apply gradient text (background-clip: text with gradient).",
+      "Don't reach for modals when a bottom sheet or inline expansion works.",
+      "Don't use corporate wellness palettes (Calm/Headspace soft pastels).",
+      "Don't gamify with Duolingo-style mechanics.",
+      "Don't use text_dim (#9CA0CC) or card_dark (#161929) — legacy cold values, scheduled for removal.",
+      "Don't put golden-hour on decorative elements."
+    ]
+  }
+}

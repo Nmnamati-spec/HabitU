@@ -98,8 +98,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
 
         if (isVideo && imageUrl != null && !imageUrl.isEmpty()) {
             holder.frameVideoPost.setVisibility(View.VISIBLE);
-            holder.imgPost.setVisibility(View.GONE);
+            holder.frameImageContainer.setVisibility(View.GONE);
             holder.frameHabitIcon.setVisibility(View.GONE);
+            holder.tvHabitTagContent.setVisibility(View.GONE);
             final String videoUrl = imageUrl;
             holder.frameVideoPost.setOnClickListener(v -> {
                 Intent intent = new Intent(Intent.ACTION_VIEW);
@@ -108,14 +109,19 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
                 context.startActivity(intent);
             });
         } else if (imageUrl != null && !imageUrl.isEmpty()) {
+            holder.frameImageContainer.setVisibility(View.VISIBLE);
             holder.imgPost.setVisibility(View.VISIBLE);
             holder.frameHabitIcon.setVisibility(View.GONE);
             holder.frameVideoPost.setVisibility(View.GONE);
+            holder.tvHabitTagContent.setVisibility(View.GONE);
             Glide.with(context).load(imageUrl).into(holder.imgPost);
         } else {
+            holder.frameImageContainer.setVisibility(View.GONE);
             holder.imgPost.setVisibility(View.GONE);
             holder.frameHabitIcon.setVisibility(View.VISIBLE);
             holder.frameVideoPost.setVisibility(View.GONE);
+            holder.tvHabitTagContent.setText(habit);
+            holder.tvHabitTagContent.setVisibility(View.VISIBLE);
             holder.imgHabitIcon.setImageResource(HabitIconMapper.getIcon(habit));
         }
 
@@ -142,6 +148,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             currentLikes[0]++;
             holder.tvLikeCount.setText(String.valueOf(currentLikes[0]));
             holder.imgLike.setImageResource(R.drawable.ic_heart);
+            holder.imgLike.setColorFilter(
+                    context.getResources().getColor(R.color.golden_hour, context.getTheme()));
             animateLike(holder.imgLike);
             db.collection("posts").document(postId)
                     .update("likes", currentLikes[0]);
@@ -203,8 +211,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
 
     static class PostViewHolder extends RecyclerView.ViewHolder {
         ImageView imgPost, imgHabitIcon, imgLike, imgComment;
-        FrameLayout frameHabitIcon, frameVideoPost;
-        TextView tvHabitTag, tvDiscoverBadge, tvCaption, tvPostUser,
+        FrameLayout frameHabitIcon, frameVideoPost, frameImageContainer;
+        TextView tvHabitTag, tvHabitTagContent, tvDiscoverBadge, tvCaption, tvPostUser,
                 tvLikeCount, tvCommentCount, tvCommentPreview, tvViewAll;
         LinearLayout layoutLike, layoutComment, layoutCommentPreview;
 
@@ -213,10 +221,12 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             imgPost              = v.findViewById(R.id.imgPost);
             frameHabitIcon       = v.findViewById(R.id.frameHabitIcon);
             frameVideoPost       = v.findViewById(R.id.frameVideoPost);
+            frameImageContainer  = v.findViewById(R.id.frameImageContainer);
             imgHabitIcon         = v.findViewById(R.id.imgHabitIcon);
             imgLike              = v.findViewById(R.id.imgLike);
             imgComment           = v.findViewById(R.id.imgComment);
             tvHabitTag           = v.findViewById(R.id.tvHabitTag);
+            tvHabitTagContent    = v.findViewById(R.id.tvHabitTagContent);
             tvDiscoverBadge      = v.findViewById(R.id.tvDiscoverBadge);
             tvCaption            = v.findViewById(R.id.tvCaption);
             tvPostUser           = v.findViewById(R.id.tvPostUser);

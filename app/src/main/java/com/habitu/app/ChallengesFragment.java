@@ -105,7 +105,7 @@ public class ChallengesFragment extends Fragment {
         TextView tvJoin = new TextView(getContext());
         tvJoin.setText("Join Challenge →");
         tvJoin.setTextSize(12);
-        tvJoin.setTextColor(0xFFC8F53B);
+        tvJoin.setTextColor(0xFFD4A832);
         tvJoin.setTypeface(null, android.graphics.Typeface.BOLD);
         tvJoin.setOnClickListener(v ->
                 Toast.makeText(getContext(),

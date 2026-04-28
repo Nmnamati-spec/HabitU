@@ -100,11 +100,11 @@ public class UserSearchAdapter extends RecyclerView.Adapter<UserSearchAdapter.Us
             btn.setText("Following");
             btn.setBackgroundTintList(
                     ColorStateList.valueOf(Color.parseColor("#1E2018")));
-            btn.setTextColor(Color.parseColor("#C8F53B"));
+            btn.setTextColor(Color.parseColor("#D4A832"));
         } else {
             btn.setText("Follow");
             btn.setBackgroundTintList(
-                    ColorStateList.valueOf(Color.parseColor("#C8F53B")));
+                    ColorStateList.valueOf(Color.parseColor("#D4A832")));
             btn.setTextColor(Color.parseColor("#0E0F0C"));
         }
     }

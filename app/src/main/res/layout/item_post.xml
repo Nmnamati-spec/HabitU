@@ -4,92 +4,49 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="4dp"
-    app:cardCornerRadius="14dp"
+    android:layout_margin="5dp"
+    app:cardCornerRadius="16dp"
     app:cardElevation="0dp"
-    app:cardBackgroundColor="@color/card_bg"
-    app:strokeColor="@color/border"
-    app:strokeWidth="1dp">
+    app:cardBackgroundColor="@color/ember_card"
+    app:strokeColor="@color/ember_border"
+    app:strokeWidth="1dp"
+    app:rippleColor="#14F2EDE6">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!-- Post image -->
-        <ImageView
-            android:id="@+id/imgPost"
+        <!-- Image post: full-bleed with scrim overlay -->
+        <FrameLayout
+            android:id="@+id/frameImageContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
-            android:scaleType="fitCenter"
-            android:background="@color/mid_bg"
-            android:visibility="gone"/>
-
-        <!-- Video post thumbnail with play button -->
-        <FrameLayout
-            android:id="@+id/frameVideoPost"
-            android:layout_width="match_parent"
-            android:layout_height="180dp"
-            android:background="@color/mid_bg"
-            android:visibility="gone"
-            android:clickable="true"
-            android:focusable="true">
+            android:visibility="gone">
 
             <ImageView
-                android:layout_width="52dp"
-                android:layout_height="52dp"
-                android:layout_gravity="center"
-                android:src="@android:drawable/ic_media_play"
-                android:alpha="0.75"/>
-
-            <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/imgPost"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom|start"
-                android:layout_margin="8dp"
-                android:text="VIDEO"
-                android:textSize="9sp"
-                android:textStyle="bold"
-                android:textColor="@color/lime"
-                android:background="@drawable/tag_bg"
-                android:paddingStart="6dp"
-                android:paddingEnd="6dp"
-                android:paddingTop="2dp"
-                android:paddingBottom="2dp"/>
+                android:adjustViewBounds="true"
+                android:minHeight="100dp"
+                android:scaleType="centerCrop"
+                android:background="@color/warm_coal"/>
 
-        </FrameLayout>
+            <!-- Bottom gradient scrim -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:layout_gravity="bottom"
+                android:background="@drawable/img_scrim_bottom"/>
 
-        <!-- No image: habit icon placeholder -->
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="120dp"
-            android:background="@color/mid_bg"
-            android:visibility="gone"
-            android:id="@+id/frameHabitIcon">
-
-            <ImageView
-                android:id="@+id/imgHabitIcon"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_gravity="center"
-                android:padding="8dp"
-                android:background="@drawable/icon_container_bg"/>
-
-        </FrameLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="10dp">
-
-            <!-- Habit tag -->
+            <!-- Habit tag — sits over the scrim at bottom-start -->
             <TextView
                 android:id="@+id/tvHabitTag"
                 android:textSize="9sp"
                 android:textStyle="bold"
-                android:textColor="@color/lime"
+                android:textColor="@color/warm_cream"
+                android:letterSpacing="0.05"
                 android:background="@drawable/tag_bg"
                 android:paddingStart="7dp"
                 android:paddingEnd="7dp"
@@ -97,7 +54,91 @@
                 android:paddingBottom="3dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"/>
+                android:layout_gravity="bottom|start"
+                android:layout_marginStart="10dp"
+                android:layout_marginBottom="10dp"/>
+
+        </FrameLayout>
+
+        <!-- Video post: thumbnail with play indicator -->
+        <FrameLayout
+            android:id="@+id/frameVideoPost"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:background="@color/warm_coal"
+            android:visibility="gone"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_gravity="center"
+                android:src="@android:drawable/ic_media_play"
+                android:alpha="0.7"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|start"
+                android:layout_margin="10dp"
+                android:text="VIDEO"
+                android:textSize="9sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.07"
+                android:textColor="@color/golden_hour"
+                android:background="@drawable/tag_bg"
+                android:paddingStart="7dp"
+                android:paddingEnd="7dp"
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp"/>
+
+        </FrameLayout>
+
+        <!-- No image: habit icon on warm surface -->
+        <FrameLayout
+            android:id="@+id/frameHabitIcon"
+            android:layout_width="match_parent"
+            android:layout_height="110dp"
+            android:background="@color/warm_coal"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/imgHabitIcon"
+                android:layout_width="52dp"
+                android:layout_height="52dp"
+                android:layout_gravity="center"
+                android:padding="10dp"
+                android:background="@drawable/icon_container_bg"/>
+
+        </FrameLayout>
+
+        <!-- Content section -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="11dp"
+            android:paddingEnd="11dp"
+            android:paddingTop="9dp"
+            android:paddingBottom="10dp">
+
+            <!-- Habit tag (shown for icon-only and video posts) -->
+            <TextView
+                android:id="@+id/tvHabitTagContent"
+                android:textSize="9sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.05"
+                android:textColor="@color/warm_cream"
+                android:background="@drawable/tag_bg"
+                android:paddingStart="7dp"
+                android:paddingEnd="7dp"
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="6dp"
+                android:visibility="gone"/>
 
             <!-- Discover badge -->
             <TextView
@@ -105,7 +146,8 @@
                 android:text="Discover"
                 android:textSize="9sp"
                 android:textStyle="bold"
-                android:textColor="#FF6B35"
+                android:letterSpacing="0.05"
+                android:textColor="@color/badge_req_text"
                 android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -114,14 +156,16 @@
             <!-- Caption -->
             <TextView
                 android:id="@+id/tvCaption"
-                android:textSize="12sp"
-                android:textColor="@color/white"
-                android:lineSpacingExtra="2dp"
+                android:textSize="13sp"
+                android:textColor="@color/warm_cream"
+                android:lineSpacingMultiplier="1.35"
+                android:maxLines="3"
+                android:ellipsize="end"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"/>
+                android:layout_marginBottom="9dp"/>
 
-            <!-- User + actions row -->
+            <!-- Username + engagement row -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -130,8 +174,8 @@
 
                 <TextView
                     android:id="@+id/tvPostUser"
-                    android:textSize="10sp"
-                    android:textColor="@color/muted"
+                    android:textSize="11sp"
+                    android:textColor="@color/warm_dust"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -145,7 +189,10 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
-                    android:padding="10dp"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="6dp"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
                     android:clickable="true"
                     android:focusable="true"
                     android:stateListAnimator="@animator/scale_press"
@@ -153,8 +200,8 @@
 
                     <ImageView
                         android:id="@+id/imgLike"
-                        android:layout_width="16dp"
-                        android:layout_height="16dp"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
                         android:src="@drawable/ic_heart_outline"/>
 
                     <TextView
@@ -162,7 +209,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="11sp"
-                        android:textColor="@color/muted"
+                        android:textColor="@color/warm_dust"
                         android:layout_marginStart="4dp"
                         android:text="0"/>
 
@@ -175,7 +222,10 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
-                    android:padding="10dp"
+                    android:paddingStart="6dp"
+                    android:paddingEnd="4dp"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
                     android:clickable="true"
                     android:focusable="true"
                     android:stateListAnimator="@animator/scale_press"
@@ -183,8 +233,8 @@
 
                     <ImageView
                         android:id="@+id/imgComment"
-                        android:layout_width="16dp"
-                        android:layout_height="16dp"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
                         android:src="@drawable/ic_comment"/>
 
                     <TextView
@@ -192,7 +242,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="11sp"
-                        android:textColor="@color/muted"
+                        android:textColor="@color/warm_dust"
                         android:layout_marginStart="4dp"
                         android:text="0"/>
 
@@ -208,15 +258,18 @@
                 android:orientation="horizontal"
                 android:background="@drawable/comment_preview_bg"
                 android:foreground="?attr/selectableItemBackground"
-                android:padding="8dp"
+                android:paddingStart="9dp"
+                android:paddingEnd="9dp"
+                android:paddingTop="7dp"
+                android:paddingBottom="7dp"
                 android:layout_marginTop="8dp"
                 android:clickable="true"
                 android:focusable="true">
 
                 <TextView
                     android:id="@+id/tvCommentPreview"
-                    android:textSize="10sp"
-                    android:textColor="@color/muted"
+                    android:textSize="11sp"
+                    android:textColor="@color/warm_dust"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -226,11 +279,12 @@
                 <TextView
                     android:id="@+id/tvViewAll"
                     android:text="View →"
-                    android:textSize="10sp"
-                    android:textColor="@color/lime"
+                    android:textSize="11sp"
+                    android:textColor="@color/golden_hour"
                     android:textStyle="bold"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"/>
 
             </LinearLayout>
 

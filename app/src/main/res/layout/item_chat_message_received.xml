@@ -13,7 +13,7 @@
         android:id="@+id/tvSenderName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="#C8F53B"
+        android:textColor="@color/golden_hour"
         android:textSize="11sp"
         android:textStyle="bold"
         android:layout_marginStart="12dp"

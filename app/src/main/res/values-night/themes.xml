@@ -1,17 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="Theme.HabitU" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="colorPrimary">@color/lime</item>
-        <item name="colorPrimaryVariant">@color/mid_bg</item>
-        <item name="colorOnPrimary">@color/dark_bg</item>
+        <item name="colorPrimary">@color/golden_hour</item>
+        <item name="colorPrimaryVariant">@color/warm_coal</item>
+        <item name="colorOnPrimary">@color/deep_bark</item>
         <item name="android:windowBackground">@color/dark_bg</item>
         <item name="android:statusBarColor">@color/dark_bg</item>
+        <item name="bottomNavigationStyle">@style/Widget.HabitU.BottomNavigation</item>
     </style>
+
+    <style name="Widget.HabitU.BottomNavigation" parent="Widget.MaterialComponents.BottomNavigationView">
+        <item name="itemRippleColor">#18D4A832</item>
+        <item name="itemActiveIndicatorStyle">@style/Widget.HabitU.BottomNavIndicator</item>
+    </style>
+
+    <style name="Widget.HabitU.BottomNavIndicator" parent="@style/Widget.Material3.BottomNavigationView.ActiveIndicator">
+        <item name="android:color">@android:color/transparent</item>
+    </style>
+
     <style name="BottomSheetTheme" parent="Theme.MaterialComponents.BottomSheetDialog">
         <item name="bottomSheetStyle">@style/BottomSheetStyle</item>
     </style>
 
     <style name="BottomSheetStyle" parent="Widget.MaterialComponents.BottomSheet">
-        <item name="android:background">@color/mid_bg</item>
+        <item name="android:background">@color/warm_coal</item>
     </style>
 </resources>

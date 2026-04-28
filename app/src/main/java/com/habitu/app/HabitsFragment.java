@@ -181,7 +181,7 @@ public class HabitsFragment extends Fragment {
         }
 
         BarDataSet dataSet = new BarDataSet(entries, "Habits");
-        dataSet.setColor(Color.parseColor("#C8F53B"));
+        dataSet.setColor(Color.parseColor("#D4A832"));
         dataSet.setValueTextColor(Color.parseColor("#F4F5F0"));
         dataSet.setValueTextSize(10f);
 
@@ -270,7 +270,7 @@ public class HabitsFragment extends Fragment {
         }
 
         tv3Val.setText("Done");
-        tv3Val.setTextColor(Color.parseColor("#C8F53B"));
+        tv3Val.setTextColor(Color.parseColor("#D4A832"));
         tv3Lbl.setText("Status");
 
         logsContainer.addView(card);

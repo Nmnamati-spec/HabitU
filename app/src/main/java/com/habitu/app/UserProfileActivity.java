@@ -125,11 +125,11 @@ public class UserProfileActivity extends AppCompatActivity {
             btnFollow.setText("Following");
             btnFollow.setBackgroundTintList(
                     ColorStateList.valueOf(Color.parseColor("#1E2018")));
-            btnFollow.setTextColor(Color.parseColor("#C8F53B"));
+            btnFollow.setTextColor(Color.parseColor("#D4A832"));
         } else {
             btnFollow.setText("Follow");
             btnFollow.setBackgroundTintList(
-                    ColorStateList.valueOf(Color.parseColor("#C8F53B")));
+                    ColorStateList.valueOf(Color.parseColor("#D4A832")));
             btnFollow.setTextColor(Color.parseColor("#0E0F0C"));
         }
     }
@@ -206,7 +206,7 @@ public class UserProfileActivity extends AppCompatActivity {
         TextView label = new TextView(this);
         label.setText(habit);
         label.setTextSize(12);
-        label.setTextColor(Color.parseColor("#C8F53B"));
+        label.setTextColor(Color.parseColor("#D4A832"));
         label.setLayoutParams(new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT));

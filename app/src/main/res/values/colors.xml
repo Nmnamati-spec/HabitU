@@ -3,9 +3,31 @@
     <color name="dark_bg">#0E0F0C</color>
     <color name="mid_bg">#1A1C17</color>
     <color name="card_bg">#222420</color>
-    <color name="lime">#C8F53B</color>
+    <color name="lime">#D4A832</color>
     <color name="muted">#6B6D65</color>
     <color name="white">#F4F5F0</color>
     <color name="border">#2A2C27</color>
     <color name="icon_bg">#1A1A1A</color>
+    <color name="card_dark">#161929</color>
+    <color name="card_border">#23263A</color>
+    <color name="text_dim">#9CA0CC</color>
+    <color name="text_muted2">#555878</color>
+    <color name="badge_open_bg">#0E2E1C</color>
+    <color name="badge_open_text">#3ECC7F</color>
+    <color name="badge_req_bg">#2C1608</color>
+    <color name="badge_req_text">#F07D3C</color>
+    <color name="badge_adm_bg">#131428</color>
+    <color name="badge_adm_text">#7B86F4</color>
+    <color name="purple_btn">#5B4FE8</color>
+
+    <!-- Warm Ember Palette -->
+    <color name="deep_bark">#130F0B</color>
+    <color name="warm_coal">#1D1812</color>
+    <color name="ember_card">#252018</color>
+    <color name="ember_border">#332B1F</color>
+    <color name="golden_hour">#D4A832</color>
+    <color name="tag_glow">#261E0A</color>
+    <color name="warm_cream">#F2EDE6</color>
+    <color name="warm_dust">#7A7060</color>
+    <color name="warm_haze">#A09480</color>
 </resources>

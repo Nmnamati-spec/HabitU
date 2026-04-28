@@ -23,7 +23,7 @@
             android:text="HabitU"
             android:textSize="22sp"
             android:textStyle="bold"
-            android:textColor="@color/lime"
+            android:textColor="@color/golden_hour"
             android:fontFamily="sans-serif-black"/>
 
         <ImageView
@@ -72,7 +72,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Cancel"
-            android:textColor="@color/muted"
+            android:textColor="@color/warm_haze"
             android:textSize="13sp"
             android:padding="10dp"
             android:clickable="true"
