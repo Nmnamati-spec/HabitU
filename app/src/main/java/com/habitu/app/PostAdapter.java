@@ -1,11 +1,15 @@
 package com.habitu.app;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.PathInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -15,7 +19,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder> {
 
@@ -24,6 +30,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     String userId;
     FirebaseFirestore db;
     OnCommentClickListener commentListener;
+
+    private final Set<Integer> animatedPositions = new HashSet<>();
+    private final PathInterpolator easeOut = new PathInterpolator(0.23f, 1f, 0.32f, 1f);
 
     public interface OnCommentClickListener {
         void onCommentClick(String postId, TextView tvCommentCount);
@@ -39,6 +48,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         this.commentListener = listener;
     }
 
+    public void resetAnimations() {
+        animatedPositions.clear();
+    }
+
     @NonNull
     @Override
     public PostViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -51,11 +64,12 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     public void onBindViewHolder(@NonNull PostViewHolder holder, int position) {
         DocumentSnapshot doc = posts.get(position);
 
-        String postId   = doc.getId();
-        String userName = doc.getString("userName");
-        String caption  = doc.getString("caption");
-        String habit    = doc.getString("habit");
-        String imageUrl = doc.getString("imageUrl");
+        String postId     = doc.getId();
+        String postUserId = doc.getString("userId");
+        String userName   = doc.getString("userName");
+        String caption    = doc.getString("caption");
+        String habit      = doc.getString("habit");
+        String imageUrl   = doc.getString("imageUrl");
         boolean isVideo  = doc.getBoolean("isVideo") != null && doc.getBoolean("isVideo");
         boolean discover = doc.getBoolean("discover") != null && doc.getBoolean("discover");
         long likes = doc.getLong("likes") != null ? doc.getLong("likes") : 0;
@@ -63,12 +77,25 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         holder.tvHabitTag.setText(habit);
         holder.tvCaption.setText(caption);
         holder.tvPostUser.setText(userName);
+
+        // Tap username → open that user's profile
+        if (postUserId != null && !postUserId.equals(userId)) {
+            holder.tvPostUser.setPaintFlags(
+                    holder.tvPostUser.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+            holder.tvPostUser.setOnClickListener(v -> {
+                Intent intent = new Intent(context, UserProfileActivity.class);
+                intent.putExtra("userId", postUserId);
+                context.startActivity(intent);
+            });
+        } else {
+            holder.tvPostUser.setPaintFlags(
+                    holder.tvPostUser.getPaintFlags() & ~Paint.UNDERLINE_TEXT_FLAG);
+            holder.tvPostUser.setOnClickListener(null);
+        }
         holder.tvLikeCount.setText(String.valueOf(likes));
 
-        // Discover badge
         holder.tvDiscoverBadge.setVisibility(discover ? View.VISIBLE : View.GONE);
 
-        // Show video, image, or habit icon depending on post type
         if (isVideo && imageUrl != null && !imageUrl.isEmpty()) {
             holder.frameVideoPost.setVisibility(View.VISIBLE);
             holder.imgPost.setVisibility(View.GONE);
@@ -92,7 +119,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             holder.imgHabitIcon.setImageResource(HabitIconMapper.getIcon(habit));
         }
 
-        // Load comment count and preview
         db.collection("posts").document(postId)
                 .collection("comments")
                 .orderBy("timestamp",
@@ -111,21 +137,65 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
                     }
                 });
 
-        // Like button
         final long[] currentLikes = {likes};
         holder.layoutLike.setOnClickListener(v -> {
             currentLikes[0]++;
             holder.tvLikeCount.setText(String.valueOf(currentLikes[0]));
             holder.imgLike.setImageResource(R.drawable.ic_heart);
+            animateLike(holder.imgLike);
             db.collection("posts").document(postId)
                     .update("likes", currentLikes[0]);
         });
 
-        // Comment button
         holder.layoutComment.setOnClickListener(v ->
                 commentListener.onCommentClick(postId, holder.tvCommentCount));
         holder.layoutCommentPreview.setOnClickListener(v ->
                 commentListener.onCommentClick(postId, holder.tvCommentCount));
+
+        // Stagger entrance animation — only plays once per position per data load
+        if (!animatedPositions.contains(position)) {
+            animatedPositions.add(position);
+            holder.itemView.setAlpha(0f);
+            holder.itemView.setTranslationY(40f);
+            long delay = Math.min(position * 55L, 400L);
+            holder.itemView.animate()
+                    .alpha(1f)
+                    .translationY(0f)
+                    .setDuration(360)
+                    .setStartDelay(delay)
+                    .setInterpolator(easeOut)
+                    .start();
+        } else {
+            holder.itemView.setAlpha(1f);
+            holder.itemView.setTranslationY(0f);
+        }
+    }
+
+    private void animateLike(ImageView imgLike) {
+        ObjectAnimator scaleUpX   = ObjectAnimator.ofFloat(imgLike, "scaleX", 1f, 1.4f);
+        ObjectAnimator scaleUpY   = ObjectAnimator.ofFloat(imgLike, "scaleY", 1f, 1.4f);
+        ObjectAnimator scaleDownX = ObjectAnimator.ofFloat(imgLike, "scaleX", 1.4f, 1f);
+        ObjectAnimator scaleDownY = ObjectAnimator.ofFloat(imgLike, "scaleY", 1.4f, 1f);
+
+        scaleUpX.setDuration(130);
+        scaleUpY.setDuration(130);
+        scaleDownX.setDuration(110);
+        scaleDownY.setDuration(110);
+
+        PathInterpolator bounceOut = new PathInterpolator(0.23f, 1f, 0.32f, 1f);
+        scaleUpX.setInterpolator(bounceOut);
+        scaleUpY.setInterpolator(bounceOut);
+        scaleDownX.setInterpolator(bounceOut);
+        scaleDownY.setInterpolator(bounceOut);
+
+        AnimatorSet scaleUp = new AnimatorSet();
+        scaleUp.playTogether(scaleUpX, scaleUpY);
+        AnimatorSet scaleDown = new AnimatorSet();
+        scaleDown.playTogether(scaleDownX, scaleDownY);
+
+        AnimatorSet full = new AnimatorSet();
+        full.playSequentially(scaleUp, scaleDown);
+        full.start();
     }
 
     @Override

@@ -10,6 +10,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -108,6 +109,10 @@ public class RegisterActivity extends AppCompatActivity {
                             user.put("email",      email);
                             user.put("university", university);
                             user.put("userId",     userId);
+                            user.put("followers",  new ArrayList<>());
+                            user.put("following",  new ArrayList<>());
+                            user.put("searchName",
+                                    (firstName + " " + surname).toLowerCase());
 
                             // Save to Firestore under "users" collection
                             db.collection("users").document(userId).set(user)

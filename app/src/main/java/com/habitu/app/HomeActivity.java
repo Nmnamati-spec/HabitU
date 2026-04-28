@@ -3,6 +3,7 @@ package com.habitu.app;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.animation.PathInterpolator;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -53,6 +54,28 @@ public class HomeActivity extends AppCompatActivity {
                 .beginTransaction()
                 .replace(R.id.fragmentContainer, fragment)
                 .commit();
-        fabUpload.setVisibility(showFab ? View.VISIBLE : View.GONE);
+
+        if (showFab) {
+            fabUpload.setScaleX(0.72f);
+            fabUpload.setScaleY(0.72f);
+            fabUpload.setAlpha(0f);
+            fabUpload.setVisibility(View.VISIBLE);
+            fabUpload.animate()
+                    .scaleX(1f)
+                    .scaleY(1f)
+                    .alpha(1f)
+                    .setDuration(250)
+                    .setInterpolator(new PathInterpolator(0.23f, 1f, 0.32f, 1f))
+                    .start();
+        } else if (fabUpload.getVisibility() == View.VISIBLE) {
+            fabUpload.animate()
+                    .scaleX(0.72f)
+                    .scaleY(0.72f)
+                    .alpha(0f)
+                    .setDuration(180)
+                    .setInterpolator(new PathInterpolator(0.55f, 0f, 1f, 0.45f))
+                    .withEndAction(() -> fabUpload.setVisibility(View.GONE))
+                    .start();
+        }
     }
 }

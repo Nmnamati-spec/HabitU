@@ -145,9 +145,11 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
-                    android:paddingEnd="12dp"
+                    android:padding="10dp"
                     android:clickable="true"
-                    android:focusable="true">
+                    android:focusable="true"
+                    android:stateListAnimator="@animator/scale_press"
+                    android:foreground="?attr/selectableItemBackgroundBorderless">
 
                     <ImageView
                         android:id="@+id/imgLike"
@@ -173,8 +175,11 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
+                    android:padding="10dp"
                     android:clickable="true"
-                    android:focusable="true">
+                    android:focusable="true"
+                    android:stateListAnimator="@animator/scale_press"
+                    android:foreground="?attr/selectableItemBackgroundBorderless">
 
                     <ImageView
                         android:id="@+id/imgComment"
@@ -202,6 +207,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:background="@drawable/comment_preview_bg"
+                android:foreground="?attr/selectableItemBackground"
                 android:padding="8dp"
                 android:layout_marginTop="8dp"
                 android:clickable="true"
