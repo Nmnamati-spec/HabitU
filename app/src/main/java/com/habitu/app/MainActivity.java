@@ -1,5 +1,9 @@
 package com.habitu.app;
-
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import java.util.Calendar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -26,6 +30,31 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main); // Load the XML screen
+        scheduleReminder();
+    }
+    private void scheduleReminder() {
+
+        Intent intent = new Intent(this, ReminderReceiver.class);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+        );
+
+        AlarmManager alarmManager =
+                (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.MINUTE,
+        Calendar.getInstance().get(Calendar.MINUTE)+1);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+
+        alarmManager.setRepeating(
+                AlarmManager.RTC_WAKEUP,
+                calendar.getTimeInMillis(),
+                AlarmManager.INTERVAL_DAY,
+                pendingIntent
+        );
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(
                     "channel_id",

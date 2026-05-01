@@ -14,6 +14,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import android.content.SharedPreferences;
+import android.content.Context;
 
 public class HabitsFragment extends Fragment {
 
@@ -272,7 +274,14 @@ public class HabitsFragment extends Fragment {
         tv3Val.setText("Done");
         tv3Val.setTextColor(Color.parseColor("#D4A832"));
         tv3Lbl.setText("Status");
+        SharedPreferences prefs = getActivity().getSharedPreferences("habit", Context.MODE_PRIVATE);
 
+        prefs.edit().putBoolean("checkedToday", true).apply();
+
+        int streak = prefs.getInt("streak", 0);
+        streak++;
+
+        prefs.edit().putInt("streak", streak).apply();
         logsContainer.addView(card);
     }
 }
