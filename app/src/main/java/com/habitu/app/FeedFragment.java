@@ -51,7 +51,7 @@ public class FeedFragment extends Fragment {
         StaggeredGridLayoutManager layoutManager =
                 new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         rvFeed.setLayoutManager(layoutManager);
-        adapter = new PostAdapter(postList, getContext(), userId, db,
+        adapter = new PostAdapter(postList, requireContext(), userId, db,
                 (postId, tvCommentCount) -> openCommentSheet(postId, tvCommentCount));
         rvFeed.setAdapter(adapter);
         DefaultItemAnimator itemAnimator = new DefaultItemAnimator();
@@ -68,8 +68,8 @@ public class FeedFragment extends Fragment {
         btnCancelSearch = view.findViewById(R.id.btnCancelSearch);
         rvSearchResults = view.findViewById(R.id.rvSearchResults);
 
-        searchAdapter = new UserSearchAdapter(searchResults, getContext(), userId, db);
-        rvSearchResults.setLayoutManager(new LinearLayoutManager(getContext()));
+        searchAdapter = new UserSearchAdapter(searchResults, requireContext(), userId, db);
+        rvSearchResults.setLayoutManager(new LinearLayoutManager(requireContext()));
         rvSearchResults.setAdapter(searchAdapter);
 
         btnSearch.setOnClickListener(v -> openSearch());

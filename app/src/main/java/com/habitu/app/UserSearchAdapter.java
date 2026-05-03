@@ -46,7 +46,7 @@ public class UserSearchAdapter extends RecyclerView.Adapter<UserSearchAdapter.Us
     @NonNull
     @Override
     public UserViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(context)
+        View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_user_search, parent, false);
         return new UserViewHolder(v);
     }

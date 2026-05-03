@@ -55,7 +55,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     @NonNull
     @Override
     public PostViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(context)
+        View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_post, parent, false);
         return new PostViewHolder(v);
     }
@@ -63,13 +63,13 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     @Override
     public void onBindViewHolder(@NonNull PostViewHolder holder, int position) {
         DocumentSnapshot doc = posts.get(position);
+        String imageUrl = doc.getString("imageUrl");
 
         String postId     = doc.getId();
         String postUserId = doc.getString("userId");
         String userName   = doc.getString("userName");
         String caption    = doc.getString("caption");
         String habit      = doc.getString("habit");
-        String imageUrl   = doc.getString("imageUrl");
         boolean isVideo  = doc.getBoolean("isVideo") != null && doc.getBoolean("isVideo");
         boolean discover = doc.getBoolean("discover") != null && doc.getBoolean("discover");
         long likes = doc.getLong("likes") != null ? doc.getLong("likes") : 0;
@@ -114,7 +114,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             holder.frameHabitIcon.setVisibility(View.GONE);
             holder.frameVideoPost.setVisibility(View.GONE);
             holder.tvHabitTagContent.setVisibility(View.GONE);
-            Glide.with(context).load(imageUrl).into(holder.imgPost);
+            Glide.with(holder.itemView.getContext()).load(imageUrl).into(holder.imgPost);
         } else {
             holder.frameImageContainer.setVisibility(View.GONE);
             holder.imgPost.setVisibility(View.GONE);

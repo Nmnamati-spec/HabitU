@@ -44,10 +44,14 @@ public class MainActivity extends AppCompatActivity {
                 (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.MINUTE,
-        Calendar.getInstance().get(Calendar.MINUTE)+1);
+        calendar.set(Calendar.HOUR_OF_DAY, 21); // 9:00 PM
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
+
+        // If 9 PM has already passed today, schedule for tomorrow
+        if (calendar.getTimeInMillis() < System.currentTimeMillis()) {
+            calendar.add(Calendar.DAY_OF_YEAR, 1);
+        }
 
         alarmManager.setRepeating(
                 AlarmManager.RTC_WAKEUP,
