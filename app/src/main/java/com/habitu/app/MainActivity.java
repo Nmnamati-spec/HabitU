@@ -31,46 +31,77 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main); // Load the XML screen
         scheduleReminder();
+        triggerInstantCheck();
+    }
+
+    private void triggerInstantCheck() {
+        Intent intent = new Intent(this, ReminderReceiver.class);
+        intent.putExtra("is_auto_reschedule", true);
+        sendBroadcast(intent);
     }
     private void scheduleReminder() {
 
         Intent intent = new Intent(this, ReminderReceiver.class);
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(
-                this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+                this,
+                0,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
         );
 
         AlarmManager alarmManager =
                 (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
+        // Set to trigger at a specific time, e.g., 8:00 PM
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 21); // 9:00 PM
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, 20); // 8 PM
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
 
-        // If 9 PM has already passed today, schedule for tomorrow
-        if (calendar.getTimeInMillis() < System.currentTimeMillis()) {
+        // If 8 PM has already passed today, schedule for tomorrow
+        if (calendar.getTimeInMillis() <= System.currentTimeMillis()) {
             calendar.add(Calendar.DAY_OF_YEAR, 1);
         }
 
-        alarmManager.setRepeating(
-                AlarmManager.RTC_WAKEUP,
-                calendar.getTimeInMillis(),
-                AlarmManager.INTERVAL_DAY,
-                pendingIntent
-        );
+        long triggerTime = calendar.getTimeInMillis();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            if (alarmManager.canScheduleExactAlarms()) {
+                alarmManager.setExactAndAllowWhileIdle(
+                        AlarmManager.RTC_WAKEUP,
+                        triggerTime,
+                        pendingIntent
+                );
+            } else {
+                alarmManager.setAndAllowWhileIdle(
+                        AlarmManager.RTC_WAKEUP,
+                        triggerTime,
+                        pendingIntent
+                );
+            }
+        } else {
+            alarmManager.setExactAndAllowWhileIdle(
+                    AlarmManager.RTC_WAKEUP,
+                    triggerTime,
+                    pendingIntent
+            );
+        }
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+
             NotificationChannel channel = new NotificationChannel(
                     "channel_id",
-                    "Notifications",
+                    "Reminders",
                     NotificationManager.IMPORTANCE_HIGH
             );
 
             NotificationManager manager =
                     getSystemService(NotificationManager.class);
-            manager.createNotificationChannel(channel);
 
-    }
+            manager.createNotificationChannel(channel);
+        }
         FirebaseMessaging.getInstance().getToken()
                 .addOnCompleteListener(task -> {
         if (task.isSuccessful()) {
